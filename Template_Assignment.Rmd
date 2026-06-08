@@ -47,7 +47,11 @@ Preferably from a URL, but if not, make sure to download the data and store it i
 
 ```{r loading_data}
 
-woningvoorraad <- read.csv("data/table__82900NED.csv")
+woningvoorraad <- read.csv("data/aantalwoningenNL.csv")
+huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv")
+
+saveRDS(woningvoorraad, "data/aantalwoningenNl.rds")
+saveRDS(huishouden_per_regio, "data/huishoudens_samenstelling_regio.rds")
 
 ```
 
