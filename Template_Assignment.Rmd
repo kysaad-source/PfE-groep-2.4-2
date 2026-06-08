@@ -17,6 +17,7 @@ output: pdf_document
 require(tidyverse)
 require(rmarkdown)
 require(yaml)
+library(dplyr)
 ```
 
 # Title Page
@@ -48,11 +49,20 @@ Preferably from a URL, but if not, make sure to download the data and store it i
 ```{r loading_data}
 
 woningvoorraad <- read.csv("data/aantalwoningenNL.csv")
-huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv")
+huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv", sep=";")
+vergunde_nieuwbouw <- read.csv("data/vergunde_nieuwbouw.csv", sep=";")
+wv_inkomen <- read.csv("data/subgroep_inkomen.csv", sep=";")
+
+
+#table(wv_inkomen$Huishoudenskenmerken)
+
+wv_inkomen$Huishoudenskenmerken <-ifelse(wv_inkomen$Huishoudenskenmerken == "Inkomen onbekend", NA, wv_inkomen$Huishoudenskenmerken) 
+
 
 saveRDS(woningvoorraad, "data/aantalwoningenNl.rds")
 saveRDS(huishouden_per_regio, "data/huishoudens_samenstelling_regio.rds")
-
+saveRDS(vergunde_nieuwbouw, "data/vergunde_nieuwbouw.rds")
+saveRDS(wv_inkomen, "data/subgroep_inkomen.rds")
 ```
 
 midwest is an example dataset included in the tidyverse package
@@ -60,8 +70,17 @@ midwest is an example dataset included in the tidyverse package
 ## 2.2 Provide a short summary of the dataset(s)
 
 ```{r}
+
+woningvoorraad <-readRDS("data/aantalwoningenNl.rds")
+huishouden_per_regio <-readRDS("data/huishoudens_samenstelling_regio.rds")
+vergunde_nieuwbouw <-readRDS("data/vergunde_nieuwbouw.rds")
+wv_inkomen <-readRDS("data/subgroep_inkomen.rds")
+
 head(woningvoorraad)
 head(huishouden_per_regio)
+head(vergunde_nieuwbouw)
+head(wv_inkomen)
+
 ```
 
 In this case we see 28 variables, but we miss some information on what units they are in. We also don't know anything about the year/moment in which this data has been captured.
