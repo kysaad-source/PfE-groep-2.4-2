@@ -8,9 +8,9 @@ output: pdf_document
 # Set-up your environment
 
 ```{r package_install, include=FALSE}
-# install.packages("tidyverse")
-# install.packages("yaml")
-# install.packages("rmarkdown")
+install.packages("tidyverse")
+install.packages("yaml")
+install.packages("rmarkdown")
 ```
 
 ```{r packages}
@@ -80,6 +80,9 @@ head(woningvoorraad)
 head(huishouden_per_regio)
 head(vergunde_nieuwbouw)
 head(wv_inkomen)
+
+Nieuwedataset <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio.s", "Perioden") )
+
 
 ```
 
