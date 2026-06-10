@@ -154,15 +154,58 @@ Voorbeeld variabelen
 ```{r}
 
 
+#variabelen maken:
+#huishouden_per_regio <- huishouden_per_regio %>% mutate("data%variab-1/data%variab-2")
 
-huishouden_per_regio <- huishouden_per_regio %>% mutate("data%variab-1/data%variab-2")
-
-# Rename the third column
-names(huishouden_per_regio)[3] <- "Regios"
+# Rename
+names(huishouden_per_regio)[3] <- "Regio's"
 names(huishouden_per_regio)[4] <- "Totaal particuliere huishoudens"
-names(huishouden_per_regio)[5] <- "Totaal Eenpersoons huishoudens"
+names(huishouden_per_regio)[5] <- "Totaal eenpersoons huishoudens"
 names(huishouden_per_regio)[6] <- "Totaal meerpersoons huishoudens"
 names(huishouden_per_regio)[7] <- "Totaal meerpersoons huishoudens niet gehuwed"
+names(huishouden_per_regio)[8] <- "Totaal meerpersoons huishoudens gehuwed"
+names(huishouden_per_regio)[9] <- "Totaal 1 ouder huishoudens"
+names(huishouden_per_regio)[10] <- "Totaal 2 persoons huishoudens"
+names(huishouden_per_regio)[11] <- "Totaal 3 persoons huishoudens"
+names(huishouden_per_regio)[12] <- "Totaal 4 persoons huishoudens"
+names(huishouden_per_regio)[13] <- "Totaal 5 persoons huishoudens"
+
+names(vergunde_nieuwbouw)[3] <- "Regio's"
+names(vergunde_nieuwbouw)[4] <- "Aantal vergunde nieuwbouw"
+
+
+names(woningvoorraad)[3] <- "Regio's"
+names(woningvoorraad)[4] <- "Aantal woningvoorraad"
+names(woningvoorraad)[5] <- "Aantal koopwoningen"
+names(woningvoorraad)[6] <- "Aantal huurwoningen"
+names(woningvoorraad)[7] <- "Van woningcorporaties"
+names(woningvoorraad)[8] <- "Overige huurders"
+names(woningvoorraad)[9] <- "Eigendom onbekend aantal"
+
+
+names(wv_inkomen)[5]<- "Regio's"
+names(wv_inkomen)[6]<- "Woningen in voorraad"
+
+
+names(huishouden_woningvoorraad)[3] <- "Regio's"
+names(huishouden_woningvoorraad)[4] <- "Totaal particuliere huishoudens"
+names(huishouden_woningvoorraad)[5] <- "Totaal eenpersoons huishoudens"
+names(huishouden_woningvoorraad)[6] <- "Totaal meerpersoons huishoudens"
+names(huishouden_woningvoorraad)[7] <- "Totaal meerpersoons huishoudens niet gehuwed"
+names(huishouden_woningvoorraad)[8] <- "Totaal meerpersoons huishoudens gehuwed"
+names(huishouden_woningvoorraad)[9] <- "Totaal 1 ouder huishoudens"
+names(huishouden_woningvoorraad)[10] <- "Totaal 2 persoons huishoudens"
+names(huishouden_woningvoorraad)[11] <-"Totaal 3 persoons huishoudens"
+names(huishouden_woningvoorraad)[12] <- "Totaal 4 persoons huishoudens"
+names(huishouden_woningvoorraad)[13] <- "Totaal 5 persoons huishoudens"
+names(huishouden_woningvoorraad)[15] <- "Aantal woningvoorraad"
+names(huishouden_woningvoorraad)[16] <- "Aantal koopwoningen"
+names(huishouden_woningvoorraad)[17] <- "Aantal huurwoningen"
+names(huishouden_woningvoorraad)[18] <- "Van woningcorporaties"
+names(huishouden_woningvoorraad)[19] <- "Overige huurders"
+names(huishouden_woningvoorraad)[20] <- "Eigendom onbekend aantal"
+
+
 
 ```
 
