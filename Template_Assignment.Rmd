@@ -4,8 +4,8 @@ author: "Studentnames and studentnumbers here"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
-
-#heyyyyyyyy \# Set-up your environment
+#heyyyyyyyy
+# Set-up your environment
 
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
@@ -17,6 +17,7 @@ install.packages("rmarkdown")
 require(tidyverse)
 require(rmarkdown)
 require(yaml)
+library(dplyr)
 ```
 
 # Title Page
@@ -35,9 +36,9 @@ Use APA referencing throughout your document. [Here's a link to some explanation
 
 Include the following:
 
-- Why is this relevant?
+-   Why is this relevant?
 
-- ...
+-   ...
 
 # Part 2 - Data Sourcing
 
@@ -46,7 +47,22 @@ Include the following:
 Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
 
 ```{r loading_data}
-dataset <- midwest
+
+woningvoorraad <- read.csv("data/aantalwoningenNL.csv")
+huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv", sep=";")
+vergunde_nieuwbouw <- read.csv("data/vergunde_nieuwbouw.csv", sep=";")
+wv_inkomen <- read.csv("data/subgroep_inkomen.csv", sep=";")
+
+
+#table(wv_inkomen$Huishoudenskenmerken)
+
+wv_inkomen$Huishoudenskenmerken <-ifelse(wv_inkomen$Huishoudenskenmerken == "Inkomen onbekend", NA, wv_inkomen$Huishoudenskenmerken) 
+
+
+saveRDS(woningvoorraad, "data/aantalwoningenNl.rds")
+saveRDS(huishouden_per_regio, "data/huishoudens_samenstelling_regio.rds")
+saveRDS(vergunde_nieuwbouw, "data/vergunde_nieuwbouw.rds")
+saveRDS(wv_inkomen, "data/subgroep_inkomen.rds")
 ```
 
 midwest is an example dataset included in the tidyverse package
@@ -54,7 +70,6 @@ midwest is an example dataset included in the tidyverse package
 ## 2.2 Provide a short summary of the dataset(s)
 
 ```{r}
-<<<<<<< Updated upstream
 
 woningvoorraad <-readRDS("data/aantalwoningenNl.rds")
 huishouden_per_regio <-readRDS("data/huishoudens_samenstelling_regio.rds")
@@ -68,9 +83,6 @@ head(wv_inkomen)
 
 hafhoisadfhsdoifh
 
-=======
-head(dataset)
->>>>>>> Stashed changes
 ```
 
 ## variablen aan elkaar linken
@@ -98,9 +110,9 @@ These are things that are usually included in the metadata of the dataset. For y
 
 Think of things like:
 
-- Do the variables contain health information or SES information?
+-   Do the variables contain health information or SES information?
 
-- Have they been measured by interviewing individuals or is the data coming from administrative sources?
+-   Have they been measured by interviewing individuals or is the data coming from administrative sources?
 
 *For the sake of this example, I will continue with the assignment...*
 
