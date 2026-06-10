@@ -154,7 +154,7 @@ names(huishouden_per_regio)[3] <- "naam"
 
 huishouden_per_regio <- huishouden_per_regio %>% mutate("data%variab-1/data%variab-2")
 
-
+dsf
 
 ```
 
