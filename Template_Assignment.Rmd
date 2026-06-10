@@ -63,6 +63,8 @@ saveRDS(woningvoorraad, "data/aantalwoningenNl.rds")
 saveRDS(huishouden_per_regio, "data/huishoudens_samenstelling_regio.rds")
 saveRDS(vergunde_nieuwbouw, "data/vergunde_nieuwbouw.rds")
 saveRDS(wv_inkomen, "data/subgroep_inkomen.rds")
+
+
 ```
 
 midwest is an example dataset included in the tidyverse package
@@ -81,7 +83,7 @@ head(huishouden_per_regio)
 head(vergunde_nieuwbouw)
 head(wv_inkomen)
 
-hafhoisadfhsdoifh
+
 
 ```
 
@@ -89,7 +91,7 @@ hafhoisadfhsdoifh
 ```{r}
 
 
-Nieuwedataset <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio.s", "Perioden") )
+huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio.s", "Perioden") )
 
 
 
@@ -142,6 +144,8 @@ names(woningvoorraad)
 
 names(wv_inkomen)
 
+names(huishouden_woningvoorraad)
+
 
 ```
 
@@ -149,12 +153,12 @@ names(wv_inkomen)
 Voorbeeld variabelen
 ```{r}
 
-# Rename the third column
-names(huishouden_per_regio)[3] <- "naam"
+
 
 huishouden_per_regio <- huishouden_per_regio %>% mutate("data%variab-1/data%variab-2")
 
-dsf
+# Rename the third column
+names(huishouden_per_regio)[3] <- "Regios"
 
 ```
 
