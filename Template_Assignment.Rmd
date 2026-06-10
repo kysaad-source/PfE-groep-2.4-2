@@ -159,6 +159,10 @@ huishouden_per_regio <- huishouden_per_regio %>% mutate("data%variab-1/data%vari
 
 # Rename the third column
 names(huishouden_per_regio)[3] <- "Regios"
+names(huishouden_per_regio)[4] <- "Totaal particuliere huishoudens"
+names(huishouden_per_regio)[5] <- "Totaal Eenpersoons huishoudens"
+names(huishouden_per_regio)[6] <- "Totaal meerpersoons huishoudens"
+names(huishouden_per_regio)[7] <- "Totaal meerpersoons huishoudens niet gehuwed"
 
 ```
 
