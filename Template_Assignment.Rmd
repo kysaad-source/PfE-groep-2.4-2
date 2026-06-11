@@ -214,6 +214,10 @@ Variable 1
 
 ```{r gen_var1}
 
+vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
+#View permitted new construction (number) over the years.
+ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_y_continuous(limits = c(60000, NA)) + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
+
 ```
 Variable 2
 
@@ -225,13 +229,11 @@ Variable 2
 
 ```{r}
 
-
 ```
 
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
-
 
 ```
 
