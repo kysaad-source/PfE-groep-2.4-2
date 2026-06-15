@@ -80,12 +80,6 @@ huishouden_per_regio <-readRDS("data/huishoudens_samenstelling_regio.rds")
 vergunde_nieuwbouw <-readRDS("data/vergunde_nieuwbouw.rds")
 wv_inkomen <-readRDS("data/subgroep_inkomen.rds")
 
-head(woningvoorraad)
-head(huishouden_per_regio)
-head(vergunde_nieuwbouw)
-head(wv_inkomen)
-
-
 
 ```
 
@@ -132,7 +126,7 @@ Think of things like:
 
 
 ```{r data_cleaning}
-mean(dataset$percollege)
+#mean(dataset$percollege)
 ```
 
 Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
@@ -215,14 +209,33 @@ Variable 1
 #variabelen maken:
 huishouden_woningvoorraad$Aantal_woningvoorraad <- as.numeric(huishouden_woningvoorraad$Aantal_woningvoorraad)
 huishouden_woningvoorraad$Totaal_particuliere_huishoudens <- as.numeric(huishouden_woningvoorraad$Totaal_particuliere_huishoudens)
+
 huishouden_woningvoorraad$woningen_per_huishouden <- huishouden_woningvoorraad$Aantal_woningvoorraad/huishouden_woningvoorraad$Totaal_particuliere_huishoudens
 ```
+
 Variable 2
 
 ```{r gen_var2}
 
 # als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
 
+
+
+
+#woningvoorraad <- woningvoorraad %>%
+  #filter(Status.van.bewoning=="Totaal")
+#huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio.s", "Perioden") )
+
+
+
+woningen_nederland <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
+woningen_nederland <- woningen_nederland %>%
+  filter(`Regio's`=="Nederland")
+
+
+woningen_provincies <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
+woningen_provincies <- woningen_provincies %>%
+  filter(`Regio's`!="Nederland")
 
 
 ```
