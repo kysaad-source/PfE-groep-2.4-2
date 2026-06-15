@@ -12,6 +12,7 @@ install.packages("tidyverse")
 install.packages("yaml")
 install.packages("rmarkdown")
 install.packages("cbsodataR")
+install.packages("systemfonts")
 ```
 
 ```{r packages, include=FALSE}
