@@ -89,7 +89,13 @@ head(wv_inkomen)
 
 ```
 
-## variablen aan elkaar linken
+
+## Linking datasets
+The datasets were linked using the variables "Regio.s" and "Perioden".
+These variables are present in both datasets and identify the same region and year.
+
+A left join was chosen because the household dataset was used as the primary dataset. Housing stock information was added for all matching regions and years
+
 ```{r}
 
 woningvoorraad <- woningvoorraad %>%
@@ -124,7 +130,6 @@ Think of things like:
 
 ## 3.1 Data cleaning
 
-Say we want to include only larger distances (above 2) in our dataset, we can filter for this.
 
 ```{r data_cleaning}
 mean(dataset$percollege)
@@ -220,13 +225,58 @@ Variable 2
 
 ## 3.3 Visualize temporal variation
 
+Onze plot
+To analyze the housing shortage in the Netherlands, it is essential to examine the number of new houses approved for construction each year.
+This figure shows the number of permits granted for new construction between 2015 and 2025. Changes over time can mean whether the supply of housing is growing enough to meet demand.
+
+The income dataset contained observations with the category
+"Inkomen onbekend" (unknown income).
+
+Because these observations could not be assigned to an income group, they were recoded as missing values (NA). This resulted in 18 missing observations, which were excluded from analyses involving income groups.
 ```{r}
+
+table(wv_inkomen$Huishoudenskenmerken, useNA = "ifany")
+
+vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
+#View permitted new construction (number) over the years.
+ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_y_continuous(limits = c(60000, NA)) + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
+
 
 ```
 
 ## 3.4 Visualize spatial variation
 
+The figure shows that the number of approved housing projects has been changing over time. While permitting has increased in some years, the variation suggests that housing prices have not increased at a constant rate. Given the current housing crisis in the Netherlands,these developments are relevant because new construction is necessary to increase the housing stock. 
+
+
+
 ```{r visualise_map}
+head(unique(huishouden_per_regio$`Regio's`), 30)
+names(huishouden_per_regio)
+unique(huishouden_per_regio$Perioden)
+spatial_data <- huishouden_per_regio %>%
+  filter(
+    Perioden == 2025,
+    `Regio's` != "Nederland",
+    Leeftijd.referentiepersoon == "Totaal"
+  )
+dim(spatial_data)
+ggplot(
+  spatial_data,
+  aes(
+    x = reorder(`Regio's`, Totaal_particuliere_huishoudens),
+    y = Totaal_particuliere_huishoudens
+  )
+) +
+  geom_col(fill = "orange") +
+  coord_flip() +
+  labs(
+    title = "Number of households by region (2025)",
+    x = "Region",
+    y = "Number of households",
+    caption = "Source: CBS"
+  ) +
+  theme_minimal()
 
 ```
 
@@ -238,6 +288,38 @@ What is the poverty rate by state?
 
 Voorbeeld:
 ```{r visualise_subpopulations}
+
+wv_sub <- wv_inkomen %>%
+  filter(
+    Woningtype == "Totaal",
+    `Regio's` == "Nederland",
+    !is.na(Huishoudenskenmerken)
+  )
+
+wv_sub$Perioden <- gsub("\\*", "", wv_sub$Perioden)
+wv_sub$Perioden <- as.numeric(wv_sub$Perioden)
+
+ggplot(
+  wv_sub,
+  aes(
+    x = Perioden,
+    y = Woningen_in_voorraad,
+    colour = Huishoudenskenmerken,
+    group = Huishoudenskenmerken
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Housing Stock by Income Group in the Netherlands",
+    x = "Year",
+    y = "Number of Dwellings",
+    colour = "Income Group"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    breaks = seq(2018, 2023, by = 1)
+  )
 
 dataset$inmetro <- dataset$inmetro %>% as.factor()
 # Boxplot of poverty rate by state using the 'midwest' dataset
@@ -252,18 +334,15 @@ ggplot(dataset, aes(x = inmetro, y = percadultpoverty)) +
   theme(
     legend.position = "right"
   )
-```
-
-
-Onze plot
-```{r}
-
-vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
-#View permitted new construction (number) over the years.
-ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_y_continuous(limits = c(60000, NA)) + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
-
 
 ```
+
+
+
+
+
+
+
 
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
