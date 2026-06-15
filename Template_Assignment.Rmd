@@ -221,6 +221,10 @@ Variable 2
 
 ```{r gen_var2}
 
+# als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
+
+
+
 ```
 
 ## 3.3 Visualize temporal variation
