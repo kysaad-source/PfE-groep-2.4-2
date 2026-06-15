@@ -11,19 +11,16 @@ output: pdf_document
 install.packages("tidyverse")
 install.packages("yaml")
 install.packages("rmarkdown")
+install.packages("cbsodataR")
 ```
 
-```{r packages}
+```{r packages, include=FALSE}
 require(tidyverse)
 require(rmarkdown)
+require(systemfonts)
 require(yaml)
 library(dplyr)
 library(stringr)
-```
-
-
-```{r packages, include=FALSE}
-library(sf)
 library(cbsodataR)
 ```
 
