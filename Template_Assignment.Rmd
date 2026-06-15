@@ -18,6 +18,7 @@ require(tidyverse)
 require(rmarkdown)
 require(yaml)
 library(dplyr)
+library(stringr)
 ```
 
 # Title Page
@@ -48,7 +49,7 @@ Preferably from a URL, but if not, make sure to download the data and store it i
 
 ```{r loading_data}
 
-woningvoorraad <- read.csv("data/aantalwoningenNL.csv")
+woningvoorraad <- read.csv("data/aantalwoningenNL.csv",)
 huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv", sep=";")
 vergunde_nieuwbouw <- read.csv("data/vergunde_nieuwbouw.csv", sep=";")
 wv_inkomen <- read.csv("data/subgroep_inkomen.csv", sep=";")
@@ -57,6 +58,7 @@ wv_inkomen <- read.csv("data/subgroep_inkomen.csv", sep=";")
 #table(wv_inkomen$Huishoudenskenmerken)
 
 wv_inkomen$Huishoudenskenmerken <-ifelse(wv_inkomen$Huishoudenskenmerken == "Inkomen onbekend", NA, wv_inkomen$Huishoudenskenmerken) 
+woningvoorraad$Totale.woningvoorraad..aantal. <- str_remove_all(woningvoorraad$Totale.woningvoorraad..aantal.,"\\.")
 
 
 saveRDS(woningvoorraad, "data/aantalwoningenNl.rds")
@@ -90,10 +92,10 @@ head(wv_inkomen)
 ## variablen aan elkaar linken
 ```{r}
 
+woningvoorraad <- woningvoorraad %>%
+  filter(Status.van.bewoning=="Totaal")
 
-huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio's", "Perioden") )
-
-
+huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio.s", "Perioden") )
 
 ```
 
@@ -150,13 +152,8 @@ names(huishouden_woningvoorraad)
 ```
 
 
-Voorbeeld variabelen
+Variabelen hernoemen
 ```{r}
-
-
-#variabelen maken:
-#huishouden_per_regio <- huishouden_per_regio %>% mutate("data%variab-1/data%variab-2")
-
 # Rename
 names(huishouden_per_regio)[3] <- "Regio's"
 names(huishouden_per_regio)[4] <- "Totaal_particuliere_huishoudens"
@@ -204,20 +201,16 @@ names(huishouden_woningvoorraad)[17] <- "Aantal_huurwoningen"
 names(huishouden_woningvoorraad)[18] <- "Van_woningcorporaties"
 names(huishouden_woningvoorraad)[19] <- "Overige_huurders"
 names(huishouden_woningvoorraad)[20] <- "Eigendom_onbekend_aantal"
-
-
-
 ```
 
 
 Variable 1
 
 ```{r gen_var1}
-
-vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
-#View permitted new construction (number) over the years.
-ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_y_continuous(limits = c(60000, NA)) + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
-
+#variabelen maken:
+huishouden_woningvoorraad$Aantal_woningvoorraad <- as.numeric(huishouden_woningvoorraad$Aantal_woningvoorraad)
+huishouden_woningvoorraad$Totaal_particuliere_huishoudens <- as.numeric(huishouden_woningvoorraad$Totaal_particuliere_huishoudens)
+huishouden_woningvoorraad$woningen_per_huishouden <- huishouden_woningvoorraad$Aantal_woningvoorraad/huishouden_woningvoorraad$Totaal_particuliere_huishoudens
 ```
 Variable 2
 
@@ -243,7 +236,9 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 What is the poverty rate by state?
 
+Voorbeeld:
 ```{r visualise_subpopulations}
+
 dataset$inmetro <- dataset$inmetro %>% as.factor()
 # Boxplot of poverty rate by state using the 'midwest' dataset
 ggplot(dataset, aes(x = inmetro, y = percadultpoverty)) +
@@ -258,6 +253,18 @@ ggplot(dataset, aes(x = inmetro, y = percadultpoverty)) +
     legend.position = "right"
   )
 ```
+
+
+Onze plot
+```{r}
+
+vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
+#View permitted new construction (number) over the years.
+ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_y_continuous(limits = c(60000, NA)) + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
+
+
+```
+
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
