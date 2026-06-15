@@ -262,8 +262,7 @@ table(wv_inkomen$Huishoudenskenmerken, useNA = "ifany")
 
 vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
 #View permitted new construction (number) over the years.
-ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_y_continuous(limits = c(60000, NA)) + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
-
+ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
 
 ```
 The figure shows that the number of approved housing projects has been changing over time. While permitting has increased in some years, the variation suggests that housing prices have not increased at a constant rate. Given the current housing crisis in the Netherlands,these developments are relevant because new construction is necessary to increase the housing stock. 
@@ -273,19 +272,23 @@ The figure shows that the number of approved housing projects has been changing 
 
 To analyze spatial variation in the Dutch housing market, the total housing stock was compared across provinces in 2025. A map was chosen because geographical differences are easier to identify visually than in a table or standard chart.
 
-The national total was excluded because the aim is to compare provinces. Province names were cleaned to match the names used in the geographical shapefile.
+The national total was excluded because the aim is to compare provinces. 
 
-The dataset was filtered to include only Dutch provinces in 2025 and to exclude the national total. The province names in the dataset were matched to the province names used in the CBS shapefile. The housing stock data were then joined to the shapefile, allowing the housing stock to be visualised geographically.
+To ensure a seamless merge with the geographical shapefile from the CBS, the province names had to be cleaned. This involved removing the administrative suffix " (PV)" from the names and recoding "Friesland" to its official name "Fryslân". Additionally, the housing stock variable was converted to a numeric format to allow for correct color mapping.
+
+Finally, the cleaned housing stock data were joined to the CBS province shapefile using a left join, allowing the housing stock to be visualised geographically.
 
 
 ```{r visualise_map}
+woning_map <- woningvoorraad %>% filter( Perioden == 2025, `Regio's` != "Nederland" ) %>% mutate( provincie = gsub(" \\(PV\\)", "", `Regio's`), Aantal_woningvoorraad = as.numeric(Aantal_woningvoorraad) )
+
 woning_map$provincie[ woning_map$provincie == "Friesland" ] <- "Fryslân"
 
 provincies <- cbs_get_sf( region = "provincie", year = 2025)
 
 kaart_data <- left_join( provincies, woning_map, by = c("statnaam" = "provincie"))
 
-
+#woning_map[, c("provincie", "Aantal_woningvoorraad")]
 #kaart_data[ is.na(kaart_data$Aantal_woningvoorraad), c("statnaam")]
 #names(provincies)
 #unique(provincies$statnaam)
