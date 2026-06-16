@@ -266,23 +266,37 @@ To ensure a seamless merge with the geographical shapefile from the CBS, the pro
 Finally, the cleaned housing stock data were joined to the CBS province shapefile using a left join, allowing the housing stock to be visualised geographically.
 
 ```{r visualise_map}
-woning_map <- woningvoorraad %>% filter( Perioden == 2025, `Regio's` != "Nederland" ) %>% mutate( provincie = gsub(" \\(PV\\)", "", `Regio's`), Aantal_woningvoorraad = as.numeric(Aantal_woningvoorraad) )
 
-woning_map$provincie[ woning_map$provincie == "Friesland" ] <- "Fryslân"
+woning_map <- woningvoorraad %>% filter(Perioden == 2025, `Regio's` != "Nederland") %>%
+  mutate(
+    provincie = gsub(" \\(PV\\)", "", `Regio's`),
+    Aantal_woningvoorraad = as.numeric(Aantal_woningvoorraad),
+    NLtotaal = sum(as.numeric(Aantal_woningvoorraad), na.rm = TRUE),
+    provincie_van_geheel_procent = (Aantal_woningvoorraad / NLtotaal) * 100
+  )
 
-provincies <- cbs_get_sf( region = "provincie", year = 2025)
+# Fix Friesland name to match CBS spatial data
+woning_map$provincie[woning_map$provincie == "Friesland"] <- "Fryslân"
 
-kaart_data <- left_join( provincies, woning_map, by = c("statnaam" = "provincie"))
+# Get province spatial data
+provincies <- cbs_get_sf(region = "provincie", year = 2025)
 
-#woning_map[, c("provincie", "Aantal_woningvoorraad")]
-#kaart_data[ is.na(kaart_data$Aantal_woningvoorraad), c("statnaam")]
-#names(provincies)
-#unique(provincies$statnaam)
-#class(woning_map$Aantal_woningvoorraad)
+# Join spatial data with housing data
+kaart_data <- left_join(provincies, woning_map, by = c("statnaam" = "provincie"))
 
-#Begin plot code
-ggplot(kaart_data) + geom_sf(aes(fill = Aantal_woningvoorraad)) + labs(title = "Housing Stock by Province in the Netherlands (2025)", fill = "Housing stock") + theme_minimal() 
+# Optional checks (uncomment to debug if needed)
+# woning_map[, c("provincie", "Aantal_woningvoorraad")]
+# kaart_data[is.na(kaart_data$Aantal_woningvoorraad), c("statnaam")]
+# names(provincies)
+# unique(provincies$statnaam)
+# class(woning_map$Aantal_woningvoorraad)
 
+# Plot
+ggplot(kaart_data) +
+  geom_sf(aes(fill = provincie_van_geheel_procent)) +
+  scale_fill_gradient(low = "beige", high = "lightpink") + 
+  labs(title = "Proportional Distribution of Dutch Housing Stock by Province (2025)", fill = "Housing Share (%)") + theme_minimal()
+```
 ```
 
 The map shows significant regional differences in housing stock across the Netherlands. Zuid-Holland, Noord-Holland and Noord-Brabant have the largest housing stocks, reflecting their larger populations and higher levels of urbanisation. Smaller provinces such as Drenthe, Flevoland and Zeeland have considerably fewer dwellings.
