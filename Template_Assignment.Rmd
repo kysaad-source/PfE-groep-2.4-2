@@ -219,23 +219,23 @@ Variable 2
 
 # als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
 
+#woningen_nederland <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
+#woningen_nederland <- woningen_nederland %>%
+  #filter(`Regio's`=="Nederland")
+#woningen_nederland <- woningen_nederland %>% filter(Perioden == "2025")
 
-
-
-#woningvoorraad <- woningvoorraad %>%
-  #filter(Status.van.bewoning=="Totaal")
-#huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by = c("Regio.s", "Perioden") )
-
-
-
-woningen_nederland <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
-woningen_nederland <- woningen_nederland %>%
-  filter(`Regio's`=="Nederland")
 
 
 woningen_provincies <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
 woningen_provincies <- woningen_provincies %>%
   filter(`Regio's`!="Nederland")
+woningen_provincies <- woningen_provincies %>% filter(Perioden == "2025")
+
+woningen_provincies$NLtotaal <- 8274478
+
+woningen_provincies$Aantal_woningvoorraad <- as.numeric(woningen_provincies$Aantal_woningvoorraad)
+woningen_provincies$NLtotaal<- as.numeric(woningen_provincies$NLtotaal)
+woningen_provincies$provincie_van_geheel_procent <- woningen_provincies$Aantal_woningvoorraad/woningen_provincies$NLtotaal*100
 
 
 ```
