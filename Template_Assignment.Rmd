@@ -297,7 +297,7 @@ ggplot(kaart_data) +
   scale_fill_gradient(low = "beige", high = "lightpink") + 
   labs(title = "Proportional Distribution of Dutch Housing Stock by Province (2025)", fill = "Housing Share (%)") + theme_minimal()
 ```
-```
+
 
 The map shows significant regional differences in housing stock across the Netherlands. Zuid-Holland, Noord-Holland and Noord-Brabant have the largest housing stocks, reflecting their larger populations and higher levels of urbanisation. Smaller provinces such as Drenthe, Flevoland and Zeeland have considerably fewer dwellings.
 
@@ -317,6 +317,7 @@ ggplot( wv_sub, aes( x = Huishoudenskenmerken, y = Woningen_in_voorraad) ) + geo
 
 ```
 
+
 The boxplot shows differences in housing stock across income groups. Comparing the distributions allows us to assess whether certain income groups consistently account for a larger share of the housing stock. This is relevant to the housing shortage because housing availability may not be equally distributed across socioeconomic groups.
 
 
@@ -329,9 +330,16 @@ Analyze the relationship between two variables.
 To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025. The data were filtered to include only residential buildings ("Woning") at the national level ("Nederland"). A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
 
 ```{r analysis}
+event_data <- vergunde_nieuwbouw %>%
+  filter(`Regio's` == "Nederland") %>% 
+  filter(Perioden >= 2015 & Perioden <= 2025)
+
+event_data <- event_data %>% arrange(Perioden)
+
 event_data$Perioden <- as.numeric(event_data$Perioden)
 
-ggplot(event_data, aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "New Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of permits") + theme_minimal()
+ggplot(
+  , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "New Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of permits") + theme_minimal()
 ```
 The figure shows fluctuations in the number of permits issued for new housing construction between 2015 and 2025. Following the introduction of the Woningbouwimpuls in 2020, permit levels increased in some years but also experienced periods of decline. The highest number of permits was recorded in 2024. Although the trend does not show a clear and immediate structural change after 2020, the figure illustrates how housing development evolved during a period in which the Dutch government implemented policies aimed at increasing housing supply. This is relevant to the housing shortage because new housing construction plays an important role in expanding the available housing stock.
 Here you provide a description of why the plot above is relevant to your specific social problem.
