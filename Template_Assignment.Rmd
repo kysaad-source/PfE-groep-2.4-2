@@ -4,8 +4,8 @@ author: "Studentnames and studentnumbers here"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
-#heyyyyyyyy
-# Set-up your environment
+
+#heyyyyyyyy \# Set-up your environment
 
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
@@ -13,6 +13,7 @@ install.packages("yaml")
 install.packages("rmarkdown")
 install.packages("cbsodataR")
 install.packages("systemfonts")
+install.packages("sf")
 ```
 
 ```{r packages, include=FALSE}
@@ -23,6 +24,7 @@ require(yaml)
 library(dplyr)
 library(stringr)
 library(cbsodataR)
+library(sf)
 ```
 
 # Title Page
@@ -41,9 +43,9 @@ Use APA referencing throughout your document. [Here's a link to some explanation
 
 Include the following:
 
--   Why is this relevant?
+- Why is this relevant?
 
--   ...
+- ...
 
 # Part 2 - Data Sourcing
 
@@ -87,10 +89,9 @@ wv_inkomen <-readRDS("data/subgroep_inkomen.rds")
 
 ```
 
-
 ## Linking datasets
-The datasets were linked using the variables "Regio.s" and "Perioden".
-These variables are present in both datasets and identify the same region and year.
+
+The datasets were linked using the variables "Regio.s" and "Perioden". These variables are present in both datasets and identify the same region and year.
 
 A left join was chosen because the household dataset was used as the primary dataset. Housing stock information was added for all matching regions and years
 
@@ -103,10 +104,7 @@ huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by 
 
 ```
 
-
-
 In this case we see 28 variables, but we miss some information on what units they are in. We also don't know anything about the year/moment in which this data has been captured.
-
 
 ``` r
 inline_code = TRUE
@@ -118,16 +116,15 @@ These are things that are usually included in the metadata of the dataset. For y
 
 Think of things like:
 
--   Do the variables contain health information or SES information?
+- Do the variables contain health information or SES information?
 
--   Have they been measured by interviewing individuals or is the data coming from administrative sources?
+- Have they been measured by interviewing individuals or is the data coming from administrative sources?
 
 *For the sake of this example, I will continue with the assignment...*
 
 # Part 3 - Quantifying
 
 ## 3.1 Data cleaning
-
 
 ```{r data_cleaning}
 #mean(dataset$percollege)
@@ -154,8 +151,8 @@ names(huishouden_woningvoorraad)
 
 ```
 
-
 Variabelen hernoemen
+
 ```{r}
 # Rename
 names(huishouden_per_regio)[3] <- "Regio's"
@@ -206,7 +203,6 @@ names(huishouden_woningvoorraad)[19] <- "Overige_huurders"
 names(huishouden_woningvoorraad)[20] <- "Eigendom_onbekend_aantal"
 ```
 
-
 Variable 1
 
 ```{r gen_var1}
@@ -246,14 +242,12 @@ woningen_provincies <- woningen_provincies %>%
 
 ## 3.3 Visualize temporal variation
 
-Onze plot
-To analyze the housing shortage in the Netherlands, it is essential to examine the number of new houses approved for construction each year.
-This figure shows the number of permits granted for new construction between 2015 and 2025. Changes over time can mean whether the supply of housing is growing enough to meet demand.
+Onze plot To analyze the housing shortage in the Netherlands, it is essential to examine the number of new houses approved for construction each year. This figure shows the number of permits granted for new construction between 2015 and 2025. Changes over time can mean whether the supply of housing is growing enough to meet demand.
 
-The income dataset contained observations with the category
-"Inkomen onbekend" (unknown income).
+The income dataset contained observations with the category "Inkomen onbekend" (unknown income).
 
 Because these observations could not be assigned to an income group, they were recoded as missing values (NA). This resulted in 18 missing observations, which were excluded from analyses involving income groups.
+
 ```{r}
 
 table(wv_inkomen$Huishoudenskenmerken, useNA = "ifany")
@@ -263,19 +257,18 @@ vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
 ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
 
 ```
-The figure shows that the number of approved housing projects has been changing over time. While permitting has increased in some years, the variation suggests that housing prices have not increased at a constant rate. Given the current housing crisis in the Netherlands,these developments are relevant because new construction is necessary to increase the housing stock. 
 
+The figure shows that the number of approved housing projects has been changing over time. While permitting has increased in some years, the variation suggests that housing prices have not increased at a constant rate. Given the current housing crisis in the Netherlands,these developments are relevant because new construction is necessary to increase the housing stock.
 
 ## 3.4 Visualize spatial variation
 
 To analyze spatial variation in the Dutch housing market, the total housing stock was compared across provinces in 2025. A map was chosen because geographical differences are easier to identify visually than in a table or standard chart.
 
-The national total was excluded because the aim is to compare provinces. 
+The national total was excluded because the aim is to compare provinces.
 
 To ensure a seamless merge with the geographical shapefile from the CBS, the province names had to be cleaned. This involved removing the administrative suffix " (PV)" from the names and recoding "Friesland" to its official name "Fryslân". Additionally, the housing stock variable was converted to a numeric format to allow for correct color mapping.
 
 Finally, the cleaned housing stock data were joined to the CBS province shapefile using a left join, allowing the housing stock to be visualised geographically.
-
 
 ```{r visualise_map}
 woning_map <- woningvoorraad %>% filter( Perioden == 2025, `Regio's` != "Nederland" ) %>% mutate( provincie = gsub(" \\(PV\\)", "", `Regio's`), Aantal_woningvoorraad = as.numeric(Aantal_woningvoorraad) )
@@ -296,10 +289,10 @@ kaart_data <- left_join( provincies, woning_map, by = c("statnaam" = "provincie"
 ggplot(kaart_data) + geom_sf(aes(fill = Aantal_woningvoorraad)) + labs(title = "Housing Stock by Province in the Netherlands (2025)", fill = "Housing stock") + theme_minimal() 
 
 ```
+
 The map shows significant regional differences in housing stock across the Netherlands. Zuid-Holland, Noord-Holland and Noord-Brabant have the largest housing stocks, reflecting their larger populations and higher levels of urbanisation. Smaller provinces such as Drenthe, Flevoland and Zeeland have considerably fewer dwellings.
 
 These regional differences are relevant to the Dutch housing problem, as they highlight the concentration of housing supply in highly urbanised regions where housing demand is also strongest. Understanding these regional differences helps identify areas where housing shortages may be most severe and where additional housing development may be needed.
-
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
@@ -308,6 +301,7 @@ Here you provide a description of why the plot above is relevant to your specifi
 What is the poverty rate by state?
 
 Voorbeeld:
+
 ```{r visualise_subpopulations}
 
 wv_sub <- wv_inkomen %>%
@@ -357,14 +351,6 @@ ggplot(dataset, aes(x = inmetro, y = percadultpoverty)) +
   )
 
 ```
-
-
-
-
-
-
-
-
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
