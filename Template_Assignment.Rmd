@@ -257,13 +257,11 @@ The figure shows the number of houses available per household in the Netherlands
 
 ## 3.4 Visualize spatial variation
 
-To analyze spatial variation in the Dutch housing market, the total housing stock was compared across provinces in 2025. A map was chosen because geographical differences are easier to identify visually than in a table or standard chart.
+To analyze the spatial variation in the Dutch housing market, the share of the national housing stock in each province was calculated for 2025. This was done by dividing the housing stock of each province by the total housing stock of the Netherlands and expressing the result as a percentage. 
 
-The national total was excluded because the aim is to compare provinces.
+The data was filtered to include only provinces and not the national total. The names of the provinces were cleaned to ensure compatibility with the CBS geographic shapefile, after which the housing data were connected to the provincial boundaries using a left-hand link. 
 
-To ensure a seamless merge with the geographical shapefile from the CBS, the province names had to be cleaned. This involved removing the administrative suffix " (PV)" from the names and recoding "Friesland" to its official name "Fryslân". Additionally, the housing stock variable was converted to a numeric format to allow for correct color mapping.
-
-Finally, the cleaned housing stock data were joined to the CBS province shapefile using a left join, allowing the housing stock to be visualised geographically.
+A choropleth map was used because geographical differences in housing distribution are easier to identify on a map than in a conventional table or graph.
 
 ```{r visualise_map}
 
@@ -299,9 +297,9 @@ ggplot(kaart_data) +
 ```
 
 
-The map shows significant regional differences in housing stock across the Netherlands. Zuid-Holland, Noord-Holland and Noord-Brabant have the largest housing stocks, reflecting their larger populations and higher levels of urbanisation. Smaller provinces such as Drenthe, Flevoland and Zeeland have considerably fewer dwellings.
+The map shows how the Dutch housing stock is distributed across provinces in 2025. Zuid-Holland, Noord-Holland, and Noord-Brabant have the largest share of the national housing stock, while provinces such as Zeeland, Drenthe, and Flevoland have the smallest shares.
 
-These regional differences are relevant to the Dutch housing problem, as they highlight the concentration of housing supply in highly urbanised regions where housing demand is also strongest. Understanding these regional differences helps identify areas where housing shortages may be most severe and where additional housing development may be needed.
+This pattern reflects the concentration of population and economic activity in the western and southern parts of the Netherlands. The map is relevant to the Dutch housing shortage because it shows where the housing supply is geographically concentrated. Knowledge of the spatial distribution of the housing stock helps to identify regional imbalances between supply and demand in the housing market and provides insight into where additional housing construction is needed.
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
@@ -327,9 +325,16 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 Analyze the relationship between two variables.
 
-To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025. The data were filtered to include only residential buildings ("Woning") at the national level ("Nederland").Incomplete observations for 2026 were excluded from the analysis because only partial monthly data were available, whereas the other observations represent complete calendar years. A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
+To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025. 
+
+The data was filtered to include only residential buildings ("Woning") at the national level ("Nederland").Incomplete observations for 2026 were excluded from the analysis because only partial monthly data were available, whereas the other observations represent complete calendar years. The year variable was converted to a numeric format to enable temporal visualisation in a line plot.
+
+A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
 
 ```{r analysis}
+event_data <- vergunde_nieuwbouw %>%
+  filter(`Regio's` == "Nederland")
+
 event_data <- event_data %>%
   filter(!is.na(as.numeric(Perioden)))
 
