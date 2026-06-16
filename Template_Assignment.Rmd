@@ -327,21 +327,18 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 Analyze the relationship between two variables.
 
-To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025. The data were filtered to include only residential buildings ("Woning") at the national level ("Nederland"). A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
+To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025. The data were filtered to include only residential buildings ("Woning") at the national level ("Nederland").Incomplete observations for 2026 were excluded from the analysis because only partial monthly data were available, whereas the other observations represent complete calendar years. A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
 
 ```{r analysis}
-event_data <- vergunde_nieuwbouw %>%
-  filter(`Regio's` == "Nederland") %>% 
-  filter(Perioden >= 2015 & Perioden <= 2025)
-
-event_data <- event_data %>% arrange(Perioden)
+event_data <- event_data %>%
+  filter(!is.na(as.numeric(Perioden)))
 
 event_data$Perioden <- as.numeric(event_data$Perioden)
 
-ggplot(
-  , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "New Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of permits") + theme_minimal()
+ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "New Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of permits") + theme_minimal() + scale_y_continuous(limits = c(0, 100000))
 ```
 The figure shows fluctuations in the number of permits issued for new housing construction between 2015 and 2025. Following the introduction of the Woningbouwimpuls in 2020, permit levels increased in some years but also experienced periods of decline. The highest number of permits was recorded in 2024. Although the trend does not show a clear and immediate structural change after 2020, the figure illustrates how housing development evolved during a period in which the Dutch government implemented policies aimed at increasing housing supply. This is relevant to the housing shortage because new housing construction plays an important role in expanding the available housing stock.
+
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
 # Part 4 - Discussion
