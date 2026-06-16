@@ -250,7 +250,6 @@ Because these observations could not be assigned to an income group, they were r
 
 ```{r}
 
-table(wv_inkomen$Huishoudenskenmerken, useNA = "ifany")
 
 vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
 #View permitted new construction (number) over the years.
