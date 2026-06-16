@@ -242,11 +242,7 @@ woningen_provincies$provincie_van_geheel_procent <- woningen_provincies$Aantal_w
 
 ## 3.3 Visualize temporal variation
 
-To analyze the housing shortage in the Netherlands, it is essential to examine the number of new houses approved for construction each year. This figure shows the number of permits granted for new construction between 2015 and 2025. Changes over time can mean whether the supply of housing is growing enough to meet demand.
-
-The income dataset contained observations with the category "Inkomen onbekend" (unknown income).
-
-Because these observations could not be assigned to an income group, they were recoded as missing values (NA). This resulted in 18 missing observations, which were excluded from analyses involving income groups.
+To examine changes in housing availability over time, a new variable was created by dividing the total housing stock by the total number of private households in the Netherlands. This variable, "woningen_per_huishouden)", provides an indication of the balance between the supply of housing and the number of households.The data was filtered to include only observations for the Netherlands, and records with missing values for the housing availability indicator were excluded. A line plot was then used to visualise how the ratio evolved over time.
 
 ```{r}
 
@@ -257,7 +253,7 @@ huishouden_woningvoorraad <- huishouden_woningvoorraad %>% filter(`Regio's`=="Ne
 ggplot( subset(huishouden_woningvoorraad, !is.na(woningen_per_huishouden)), aes(x = Perioden, y = woningen_per_huishouden) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Number of houses available per household over time", x = "Year", y = "Number of houses per household") + scale_x_continuous(breaks = huishouden_woningvoorraad$Perioden) + scale_y_continuous(breaks = seq(0, 2, by = 0.01)) 
 ```
 
-The figure shows that the number of approved housing projects has been changing over time. While permitting has increased in some years, the variation suggests that housing prices have not increased at a constant rate. Given the current housing crisis in the Netherlands,these developments are relevant because new construction is necessary to increase the housing stock.
+The figure shows the number of houses available per household in the Netherlands over time. This indicator is relevant to the housing shortage because it relates the housing stock directly to the number of households that require housing. A declining ratio would suggest that household growth is outpacing the expansion of the housing stock, potentially increasing pressure on the housing market. Conversely, a stable or increasing ratio would indicate that housing supply is keeping pace with household formation. The trend therefore provides insight into the development of housing availability in relation to demand.
 
 ## 3.4 Visualize spatial variation
 
