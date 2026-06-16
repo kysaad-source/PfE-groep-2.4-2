@@ -242,7 +242,7 @@ woningen_provincies <- woningen_provincies %>%
 
 ## 3.3 Visualize temporal variation
 
-Onze plot To analyze the housing shortage in the Netherlands, it is essential to examine the number of new houses approved for construction each year. This figure shows the number of permits granted for new construction between 2015 and 2025. Changes over time can mean whether the supply of housing is growing enough to meet demand.
+To analyze the housing shortage in the Netherlands, it is essential to examine the number of new houses approved for construction each year. This figure shows the number of permits granted for new construction between 2015 and 2025. Changes over time can mean whether the supply of housing is growing enough to meet demand.
 
 The income dataset contained observations with the category "Inkomen onbekend" (unknown income).
 
@@ -298,59 +298,18 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 ## 3.5 Visualize sub-population variation
 
-What is the poverty rate by state?
-
-Voorbeeld:
+To investigate variation across sub-populations, housing stock levels were compared across income groups. Households with unknown income were excluded from the analysis. A boxplot was used to visualise differences in the distribution of housing stock between income categories over time.
 
 ```{r visualise_subpopulations}
 
-wv_sub <- wv_inkomen %>%
-  filter(
-    Woningtype == "Totaal",
-    `Regio's` == "Nederland",
-    !is.na(Huishoudenskenmerken)
-  )
+wv_sub <- wv_inkomen %>% filter( Woningtype == "Totaal", `Regio's` == "Nederland", !is.na(Huishoudenskenmerken))
 
-wv_sub$Perioden <- gsub("\\*", "", wv_sub$Perioden)
-wv_sub$Perioden <- as.numeric(wv_sub$Perioden)
-
-ggplot(
-  wv_sub,
-  aes(
-    x = Perioden,
-    y = Woningen_in_voorraad,
-    colour = Huishoudenskenmerken,
-    group = Huishoudenskenmerken
-  )
-) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2) +
-  labs(
-    title = "Housing Stock by Income Group in the Netherlands",
-    x = "Year",
-    y = "Number of Dwellings",
-    colour = "Income Group"
-  ) +
-  theme_minimal() +
-  scale_x_continuous(
-    breaks = seq(2018, 2023, by = 1)
-  )
-
-dataset$inmetro <- dataset$inmetro %>% as.factor()
-# Boxplot of poverty rate by state using the 'midwest' dataset
-ggplot(dataset, aes(x = inmetro, y = percadultpoverty)) +
-  geom_boxplot() +
-  labs(
-    title = "Distribution of Poverty Rates by Metropolitan status (Midwest counties)",
-    x = "Metropolitan Area",
-    y = "Poverty Rate of Adults (%)"
-  ) +
-  theme_minimal() +
-  theme(
-    legend.position = "right"
-  )
+ggplot( wv_sub, aes( x = Huishoudenskenmerken, y = Woningen_in_voorraad) ) + geom_boxplot(fill = "pink") + labs( title = "Distribution of Housing Stock by Income Group (2018–2023)", x = "Income Group", y = "Number of Dwellings") + theme_minimal()
 
 ```
+
+The boxplot shows differences in housing stock across income groups. Comparing the distributions allows us to assess whether certain income groups consistently account for a larger share of the housing stock. This is relevant to the housing shortage because housing availability may not be equally distributed across socioeconomic groups.
+
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
