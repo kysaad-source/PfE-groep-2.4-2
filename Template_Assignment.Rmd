@@ -251,10 +251,10 @@ Because these observations could not be assigned to an income group, they were r
 ```{r}
 
 
-vergunde_nieuwbouw$Perioden <- as.numeric(vergunde_nieuwbouw$Perioden)
+huishouden_woningvoorraad$Perioden <- as.numeric(huishouden_woningvoorraad$Perioden)
+huishouden_woningvoorraad <- huishouden_woningvoorraad %>% filter(`Regio's`=="Nederland")
 #View permitted new construction (number) over the years.
-ggplot( subset(vergunde_nieuwbouw, !is.na(Aantal_vergunde_nieuwbouw)), aes(x = Perioden, y = Aantal_vergunde_nieuwbouw) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Licensed new construction over time", x = "Year", y = "Number of permitted new construction") + scale_x_continuous(breaks = vergunde_nieuwbouw$Perioden) + scale_y_continuous(breaks = seq(60000, 95000, by = 5000)) + coord_cartesian(ylim = c(60000, 95000))
-
+ggplot( subset(huishouden_woningvoorraad, !is.na(woningen_per_huishouden)), aes(x = Perioden, y = woningen_per_huishouden) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Number of houses available per household over time", x = "Year", y = "Number of houses per household") + scale_x_continuous(breaks = huishouden_woningvoorraad$Perioden) + scale_y_continuous(breaks = seq(0, 2, by = 0.01)) 
 ```
 
 The figure shows that the number of approved housing projects has been changing over time. While permitting has increased in some years, the variation suggests that housing prices have not increased at a constant rate. Given the current housing crisis in the Netherlands,these developments are relevant because new construction is necessary to increase the housing stock.
