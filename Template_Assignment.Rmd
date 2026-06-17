@@ -1,11 +1,9 @@
 ---
-title: "Template1"
-author: "Studentnames and studentnumbers here"
+title: "Quantifying a social problem - The dutch housing crisis"
+author: "karim"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
-
-#heyyyyyyyy \# Set-up your environment
 
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
@@ -31,7 +29,7 @@ library(tinytex)
 
 # Title Page
 
-Include your names
+Alicia Djidda - 2865518, Aysenur Polat - 2837229, Douae Benomar - 2884939, Karim Saad - 2881177, Rwan el Arabi - 2807594, Vanity Fullington - 2870344
 
 Include the tutorial group number
 
@@ -55,7 +53,7 @@ Include the following:
 
 Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
 
-```{r loading_data}
+```{r loading_data, echo=FALSE}
 
 woningvoorraad <- read.csv("data/aantalwoningenNL.csv",)
 huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv", sep=";")
@@ -78,7 +76,7 @@ midwest is an example dataset included in the tidyverse package
 
 ## 2.2 Provide a short summary of the dataset(s)
 
-```{r}
+```{r echo=FALSE}
 
 woningvoorraad <-readRDS("data/aantalwoningenNl.rds")
 huishouden_per_regio <-readRDS("data/huishoudens_samenstelling_regio.rds")
@@ -94,7 +92,7 @@ The datasets were linked using the variables "Regio.s" and "Perioden". These var
 
 A left join was chosen because the household dataset was used as the primary dataset. Housing stock information was added for all matching regions and years
 
-```{r}
+```{r echo=FALSE}
 
 woningvoorraad <- woningvoorraad %>%
   filter(Status.van.bewoning=="Totaal")
@@ -125,17 +123,13 @@ Think of things like:
 
 ## 3.1 Data cleaning
 
-```{r data_cleaning}
-#mean(dataset$percollege)
-```
-
 Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
 
 ## 3.2 Generate necessary variables
 
 Variabelen hernoemen
 
-```{r}
+```{r echo=FALSE}
 # Rename
 names(huishouden_per_regio)[3] <- "Regio's"
 names(huishouden_per_regio)[4] <- "Totaal_particuliere_huishoudens"
@@ -187,17 +181,16 @@ names(huishouden_woningvoorraad)[20] <- "Eigendom_onbekend_aantal"
 
 Variable 1
 
-```{r gen_var1}
+```{r gen_var1, echo=FALSE}
 huishouden_woningvoorraad$Aantal_woningvoorraad <- as.numeric(huishouden_woningvoorraad$Aantal_woningvoorraad)
 huishouden_woningvoorraad$Totaal_particuliere_huishoudens <- as.numeric(huishouden_woningvoorraad$Totaal_particuliere_huishoudens)
 
 huishouden_woningvoorraad$woningen_per_huishouden <- huishouden_woningvoorraad$Aantal_woningvoorraad/huishouden_woningvoorraad$Totaal_particuliere_huishoudens
 ```
 
-Variable 2
-Als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
+Variable 2 Als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
 
-```{r gen_var2}
+```{r gen_var2, echo=FALSE}
 
 
 woningen_provincies <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
@@ -218,7 +211,7 @@ woningen_provincies$provincie_van_geheel_procent <- woningen_provincies$Aantal_w
 
 To examine changes in housing availability over time, a new variable was created by dividing the total housing stock by the total number of private households in the Netherlands. This variable, "woningen_per_huishouden)", provides an indication of the balance between the supply of housing and the number of households.The data was filtered to include only observations for the Netherlands, and records with missing values for the housing availability indicator were excluded. A line plot was then used to visualise how the ratio evolved over time.
 
-```{r}
+```{r echo=FALSE}
 
 
 huishouden_woningvoorraad$Perioden <- as.numeric(huishouden_woningvoorraad$Perioden)
@@ -231,13 +224,13 @@ The figure shows the number of houses available per household in the Netherlands
 
 ## 3.4 Visualize spatial variation
 
-To analyze the spatial variation in the Dutch housing market, the share of the national housing stock in each province was calculated for 2025. This was done by dividing the housing stock of each province by the total housing stock of the Netherlands and expressing the result as a percentage. 
+To analyze the spatial variation in the Dutch housing market, the share of the national housing stock in each province was calculated for 2025. This was done by dividing the housing stock of each province by the total housing stock of the Netherlands and expressing the result as a percentage.
 
-The data was filtered to include only provinces and not the national total. The names of the provinces were cleaned to ensure compatibility with the CBS geographic shapefile, after which the housing data were connected to the provincial boundaries using a left-hand link. 
+The data was filtered to include only provinces and not the national total. The names of the provinces were cleaned to ensure compatibility with the CBS geographic shapefile, after which the housing data were connected to the provincial boundaries using a left-hand link.
 
 A choropleth map was used because geographical differences in housing distribution are easier to identify on a map than in a conventional table or graph.
 
-```{r visualise_map}
+```{r visualise_map, echo=FALSE}
 
 woning_map <- woningvoorraad %>% filter(Perioden == 2025, `Regio's` != "Nederland") %>%
   mutate(
@@ -256,12 +249,6 @@ provincies <- cbs_get_sf(region = "provincie", year = 2025)
 # Join spatial data with housing data
 kaart_data <- left_join(provincies, woning_map, by = c("statnaam" = "provincie"))
 
-# Optional checks (uncomment to debug if needed)
-# woning_map[, c("provincie", "Aantal_woningvoorraad")]
-# kaart_data[is.na(kaart_data$Aantal_woningvoorraad), c("statnaam")]
-# names(provincies)
-# unique(provincies$statnaam)
-# class(woning_map$Aantal_woningvoorraad)
 
 # Plot
 ggplot(kaart_data) +
@@ -269,7 +256,6 @@ ggplot(kaart_data) +
   scale_fill_gradient(low = "beige", high = "lightpink") + 
   labs(title = "Proportional Distribution of Dutch Housing Stock by Province (2025)", fill = "Housing Share (%)") + theme_minimal()
 ```
-
 
 The map shows how the Dutch housing stock is distributed across provinces in 2025. Zuid-Holland, Noord-Holland, and Noord-Brabant have the largest share of the national housing stock, while provinces such as Zeeland, Drenthe, and Flevoland have the smallest shares.
 
@@ -281,17 +267,17 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 To investigate variation across sub-populations, housing stock levels were compared across income groups. Households with unknown income were excluded from the analysis. A boxplot was used to visualise differences in the distribution of housing stock between income categories over time.
 
-```{r visualise_subpopulations}
+```{r visualise_subpopulations, echo=FALSE}
 
 wv_sub <- wv_inkomen %>% filter( Woningtype == "Totaal", `Regio's` == "Nederland", !is.na(Huishoudenskenmerken))
 
 ggplot( wv_sub, aes( x = Huishoudenskenmerken, y = Woningen_in_voorraad) ) + geom_boxplot(fill = "pink") + labs( title = "Distribution of Housing Stock by Income Group (2018–2023)", x = "Income Group", y = "Number of Dwellings") + theme_minimal()
 
+
+
 ```
 
-
 The boxplot shows differences in housing stock across income groups. Comparing the distributions allows us to assess whether certain income groups consistently account for a larger share of the housing stock. This is relevant to the housing shortage because housing availability may not be equally distributed across socioeconomic groups.
-
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
 
@@ -299,13 +285,13 @@ Here you provide a description of why the plot above is relevant to your specifi
 
 Analyze the relationship between two variables.
 
-To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025. 
+To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025.
 
 The data was filtered to include only residential buildings ("Woning") at the national level ("Nederland").Incomplete observations for 2026 were excluded from the analysis because only partial monthly data were available, whereas the other observations represent complete calendar years. The year variable was converted to a numeric format to enable temporal visualisation in a line plot.
 
 A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
 
-```{r analysis}
+```{r analysis, echo=FALSE}
 event_data <- vergunde_nieuwbouw %>%
   filter(`Regio's` == "Nederland")
 
@@ -314,8 +300,9 @@ event_data <- event_data %>%
 
 event_data$Perioden <- as.numeric(event_data$Perioden)
 
-ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "New Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of permits") + theme_minimal() + scale_y_continuous(limits = c(0, 100000))
+ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of construction permits") + theme_minimal() + scale_y_continuous(limits = c(0, 100000))
 ```
+
 The figure shows fluctuations in the number of permits issued for new housing construction between 2015 and 2025. Following the introduction of the Woningbouwimpuls in 2020, permit levels increased in some years but also experienced periods of decline. The highest number of permits was recorded in 2024. Although the trend does not show a clear and immediate structural change after 2020, the figure illustrates how housing development evolved during a period in which the Dutch government implemented policies aimed at increasing housing supply. This is relevant to the housing shortage because new housing construction plays an important role in expanding the available housing stock.
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
