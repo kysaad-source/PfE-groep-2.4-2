@@ -11,6 +11,7 @@ install.packages("yaml")
 install.packages("cbsodataR")
 install.packages("systemfonts")
 install.packages("sf")
+install.packages("scales")
 #install.packages("tinytex")
 #tinytex::install_tinytex()
 ```
@@ -25,6 +26,7 @@ library(stringr)
 library(cbsodataR)
 library(sf)
 library(tinytex)
+library(scales)
 ```
 
 # Title Page
@@ -271,8 +273,26 @@ To investigate variation across sub-populations, housing stock levels were compa
 
 wv_sub <- wv_inkomen %>% filter( Woningtype == "Totaal", `Regio's` == "Nederland", !is.na(Huishoudenskenmerken))
 
-ggplot( wv_sub, aes( x = Huishoudenskenmerken, y = Woningen_in_voorraad) ) + geom_boxplot(fill = "pink") + labs( title = "Distribution of Housing Stock by Income Group (2018–2023)", x = "Income Group", y = "Number of Dwellings") + theme_minimal()
-
+ggplot(wv_sub, aes(x = Huishoudenskenmerken, y = Woningen_in_voorraad, fill = Huishoudenskenmerken)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c(
+    "1e 20%-groep (laag inkomen)" = "#DBEAFE",
+    "2e 20%-groep" = "#93C5FD",
+    "3e 20%-groep" = "#60A5FA",
+    "4e 20%-groep" = "#1D4ED8",
+    "5e 20%-groep (hoog inkomen)" = "navy"
+  )) +
+  scale_x_discrete(labels = c(
+    "1e 20%-groep (laag inkomen)" = "Low Income",
+    "2e 20%-groep" = "Lower-Mid Income",
+    "3e 20%-groep" = "Mid Income",
+    "4e 20%-groep" = "Upper-Mid Income",
+    "5e 20%-groep (hoog inkomen)" = "High Income"
+  )) +
+  scale_y_continuous(labels = scales::label_number(suffix = "M", scale = 1e-6)) +
+  labs(title = "Distribution of Housing Stock by Income Group (2018-2023)", x = "Income Group", y = "Number of Houses") +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 
 ```
@@ -300,7 +320,7 @@ event_data <- event_data %>%
 
 event_data$Perioden <- as.numeric(event_data$Perioden)
 
-ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "firebrick", linewidth = 1) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of construction permits") + theme_minimal() + scale_y_continuous(limits = c(0, 100000))
+ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "papayawhip", linewidth = 2) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of construction permits") + theme_minimal() + scale_y_continuous(limits = c(0, 100000))
 ```
 
 The figure shows fluctuations in the number of permits issued for new housing construction between 2015 and 2025. Following the introduction of the Woningbouwimpuls in 2020, permit levels increased in some years but also experienced periods of decline. The highest number of permits was recorded in 2024. Although the trend does not show a clear and immediate structural change after 2020, the figure illustrates how housing development evolved during a period in which the Dutch government implemented policies aimed at increasing housing supply. This is relevant to the housing shortage because new housing construction plays an important role in expanding the available housing stock.
