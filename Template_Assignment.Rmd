@@ -10,21 +10,23 @@ output: pdf_document
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
 install.packages("yaml")
-install.packages("rmarkdown")
 install.packages("cbsodataR")
 install.packages("systemfonts")
 install.packages("sf")
+#install.packages("tinytex")
+#tinytex::install_tinytex()
 ```
 
 ```{r packages, include=FALSE}
 require(tidyverse)
-require(rmarkdown)
 require(systemfonts)
 require(yaml)
+require(tinytex)
 library(dplyr)
 library(stringr)
 library(cbsodataR)
 library(sf)
+library(tinytex)
 ```
 
 # Title Page
@@ -59,9 +61,6 @@ woningvoorraad <- read.csv("data/aantalwoningenNL.csv",)
 huishouden_per_regio <- read.csv("data/huishoudens_samenstelling_regio.csv", sep=";")
 vergunde_nieuwbouw <- read.csv("data/vergunde_nieuwbouw.csv", sep=";")
 wv_inkomen <- read.csv("data/subgroep_inkomen.csv", sep=";")
-
-
-#table(wv_inkomen$Huishoudenskenmerken)
 
 wv_inkomen$Huishoudenskenmerken <-ifelse(wv_inkomen$Huishoudenskenmerken == "Inkomen onbekend", NA, wv_inkomen$Huishoudenskenmerken) 
 woningvoorraad$Totale.woningvoorraad..aantal. <- str_remove_all(woningvoorraad$Totale.woningvoorraad..aantal.,"\\.")
@@ -134,23 +133,6 @@ Please use a separate 'R block' of code for each type of cleaning. So, e.g. one 
 
 ## 3.2 Generate necessary variables
 
-variab namen
-
-```{r}
-
-names(huishouden_per_regio)
-
-names(vergunde_nieuwbouw)
-
-names(woningvoorraad)
-
-names(wv_inkomen)
-
-names(huishouden_woningvoorraad)
-
-
-```
-
 Variabelen hernoemen
 
 ```{r}
@@ -206,7 +188,6 @@ names(huishouden_woningvoorraad)[20] <- "Eigendom_onbekend_aantal"
 Variable 1
 
 ```{r gen_var1}
-#variabelen maken:
 huishouden_woningvoorraad$Aantal_woningvoorraad <- as.numeric(huishouden_woningvoorraad$Aantal_woningvoorraad)
 huishouden_woningvoorraad$Totaal_particuliere_huishoudens <- as.numeric(huishouden_woningvoorraad$Totaal_particuliere_huishoudens)
 
@@ -214,16 +195,9 @@ huishouden_woningvoorraad$woningen_per_huishouden <- huishouden_woningvoorraad$A
 ```
 
 Variable 2
+Als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
 
 ```{r gen_var2}
-
-# als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
-
-#woningen_nederland <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
-#woningen_nederland <- woningen_nederland %>%
-  #filter(`Regio's`=="Nederland")
-#woningen_nederland <- woningen_nederland %>% filter(Perioden == "2025")
-
 
 
 woningen_provincies <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
