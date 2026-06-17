@@ -71,7 +71,6 @@ saveRDS(huishouden_per_regio, "data/huishoudens_samenstelling_regio.rds")
 saveRDS(vergunde_nieuwbouw, "data/vergunde_nieuwbouw.rds")
 saveRDS(wv_inkomen, "data/subgroep_inkomen.rds")
 
-
 ```
 
 midwest is an example dataset included in the tidyverse package
@@ -84,7 +83,6 @@ woningvoorraad <-readRDS("data/aantalwoningenNl.rds")
 huishouden_per_regio <-readRDS("data/huishoudens_samenstelling_regio.rds")
 vergunde_nieuwbouw <-readRDS("data/vergunde_nieuwbouw.rds")
 wv_inkomen <-readRDS("data/subgroep_inkomen.rds")
-
 
 ```
 
@@ -148,7 +146,6 @@ names(huishouden_per_regio)[13] <- "Totaal_5_persoons_huishoudens"
 names(vergunde_nieuwbouw)[3] <- "Regio's"
 names(vergunde_nieuwbouw)[4] <- "Aantal_vergunde_nieuwbouw"
 
-
 names(woningvoorraad)[3] <- "Regio's"
 names(woningvoorraad)[4] <- "Aantal_woningvoorraad"
 names(woningvoorraad)[5] <- "Aantal_koopwoningen"
@@ -157,10 +154,8 @@ names(woningvoorraad)[7] <- "Van_woningcorporaties"
 names(woningvoorraad)[8] <- "Overige_huurders"
 names(woningvoorraad)[9] <- "Eigendom_onbekend_aantal"
 
-
 names(wv_inkomen)[5]<- "Regio's"
 names(wv_inkomen)[6]<- "Woningen_in_voorraad"
-
 
 names(huishouden_woningvoorraad)[3] <- "Regio's"
 names(huishouden_woningvoorraad)[4] <- "Totaal_particuliere_huishoudens"
@@ -179,21 +174,23 @@ names(huishouden_woningvoorraad)[17] <- "Aantal_huurwoningen"
 names(huishouden_woningvoorraad)[18] <- "Van_woningcorporaties"
 names(huishouden_woningvoorraad)[19] <- "Overige_huurders"
 names(huishouden_woningvoorraad)[20] <- "Eigendom_onbekend_aantal"
+
 ```
 
 Variable 1
 
 ```{r gen_var1, echo=FALSE}
+
 huishouden_woningvoorraad$Aantal_woningvoorraad <- as.numeric(huishouden_woningvoorraad$Aantal_woningvoorraad)
 huishouden_woningvoorraad$Totaal_particuliere_huishoudens <- as.numeric(huishouden_woningvoorraad$Totaal_particuliere_huishoudens)
 
 huishouden_woningvoorraad$woningen_per_huishouden <- huishouden_woningvoorraad$Aantal_woningvoorraad/huishouden_woningvoorraad$Totaal_particuliere_huishoudens
+
 ```
 
 Variable 2 Als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
 
 ```{r gen_var2, echo=FALSE}
-
 
 woningen_provincies <- woningvoorraad %>% select(`Regio's`, Perioden, Aantal_woningvoorraad)
 woningen_provincies <- woningen_provincies %>%
@@ -206,7 +203,6 @@ woningen_provincies$Aantal_woningvoorraad <- as.numeric(woningen_provincies$Aant
 woningen_provincies$NLtotaal<- as.numeric(woningen_provincies$NLtotaal)
 woningen_provincies$provincie_van_geheel_procent <- woningen_provincies$Aantal_woningvoorraad/woningen_provincies$NLtotaal*100
 
-
 ```
 
 ## 3.3 Visualize temporal variation
@@ -215,11 +211,11 @@ To examine changes in housing availability over time, a new variable was created
 
 ```{r echo=FALSE}
 
-
 huishouden_woningvoorraad$Perioden <- as.numeric(huishouden_woningvoorraad$Perioden)
 huishouden_woningvoorraad <- huishouden_woningvoorraad %>% filter(`Regio's`=="Nederland")
 #View permitted new construction (number) over the years.
 ggplot( subset(huishouden_woningvoorraad, !is.na(woningen_per_huishouden)), aes(x = Perioden, y = woningen_per_huishouden) ) + geom_line(color = "darkviolet", linewidth = 1) + geom_point(color = "black", size = 2) + theme_bw() + labs( title = "Number of houses available per household over time", x = "Year", y = "Number of houses per household") + scale_x_continuous(breaks = huishouden_woningvoorraad$Perioden) + scale_y_continuous(breaks = seq(0, 2, by = 0.01)) 
+
 ```
 
 The figure shows the number of houses available per household in the Netherlands over time. This indicator is relevant to the housing shortage because it relates the housing stock directly to the number of households that require housing. A declining ratio would suggest that household growth is outpacing the expansion of the housing stock, potentially increasing pressure on the housing market. Conversely, a stable or increasing ratio would indicate that housing supply is keeping pace with household formation. The trend therefore provides insight into the development of housing availability in relation to demand.
@@ -251,12 +247,12 @@ provincies <- cbs_get_sf(region = "provincie", year = 2025)
 # Join spatial data with housing data
 kaart_data <- left_join(provincies, woning_map, by = c("statnaam" = "provincie"))
 
-
 # Plot
 ggplot(kaart_data) +
   geom_sf(aes(fill = provincie_van_geheel_procent)) +
   scale_fill_gradient(low = "beige", high = "lightpink") + 
   labs(title = "Proportional Distribution of Dutch Housing Stock by Province (2025)", fill = "Housing Share (%)") + theme_minimal()
+
 ```
 
 The map shows how the Dutch housing stock is distributed across provinces in 2025. Zuid-Holland, Noord-Holland, and Noord-Brabant have the largest share of the national housing stock, while provinces such as Zeeland, Drenthe, and Flevoland have the smallest shares.
@@ -294,7 +290,6 @@ ggplot(wv_sub, aes(x = Huishoudenskenmerken, y = Woningen_in_voorraad, fill = Hu
   theme_minimal() +
   theme(legend.position = "none")
 
-
 ```
 
 The boxplot shows differences in housing stock across income groups. Comparing the distributions allows us to assess whether certain income groups consistently account for a larger share of the housing stock. This is relevant to the housing shortage because housing availability may not be equally distributed across socioeconomic groups.
@@ -312,6 +307,7 @@ The data was filtered to include only residential buildings ("Woning") at the na
 A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
 
 ```{r analysis, echo=FALSE}
+
 event_data <- vergunde_nieuwbouw %>%
   filter(`Regio's` == "Nederland")
 
@@ -321,6 +317,7 @@ event_data <- event_data %>%
 event_data$Perioden <- as.numeric(event_data$Perioden)
 
 ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_line(colour = "papayawhip", linewidth = 2) + geom_point(colour = "black", size = 2) + geom_vline(xintercept = 2020, linetype = "dashed") + annotate("text", x = 2020.2, y = 95000, label = "Woningbouwimpuls\nintroduced (2020)", hjust = 0, size = 3) + scale_x_continuous(breaks = 2015:2025) + labs(title = "Housing Construction Permits Before and After the Woningbouwimpuls (2020)", x = "Year", y = "Number of construction permits") + theme_minimal() + scale_y_continuous(limits = c(0, 100000))
+
 ```
 
 The figure shows fluctuations in the number of permits issued for new housing construction between 2015 and 2025. Following the introduction of the Woningbouwimpuls in 2020, permit levels increased in some years but also experienced periods of decline. The highest number of permits was recorded in 2024. Although the trend does not show a clear and immediate structural change after 2020, the figure illustrates how housing development evolved during a period in which the Dutch government implemented policies aimed at increasing housing supply. This is relevant to the housing shortage because new housing construction plays an important role in expanding the available housing stock.
