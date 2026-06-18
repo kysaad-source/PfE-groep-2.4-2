@@ -1,7 +1,4 @@
 ---
-title: "Quantifying a social problem - The dutch housing crisis"
-author: "karim"
-date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
@@ -29,13 +26,14 @@ library(tinytex)
 library(scales)
 ```
 
-# Title Page
-
+# Quantifying a social problem - The dutch housing crisis
 Alicia Djidda - 2865518, Aysenur Polat - 2837229, Douae Benomar - 2884939, Karim Saad - 2881177, Rwan el Arabi - 2807594, Vanity Fullington - 2870344
 
-Include the tutorial group number
+"`r Sys.Date()`"
 
-Include your tutorial lecturer's name
+CPR-02-04
+
+Fatima Amnakour 
 
 # Part 1 - Identify a Social Problem
 
