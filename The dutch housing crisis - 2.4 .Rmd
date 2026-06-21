@@ -1,6 +1,14 @@
 ---
-output: pdf_document
+title: "Quantifying a social problem - The dutch housing crisis"
+author: "Alicia Djidda 2865518, Aysenur Polat 2837229, Douae Benomar 2884939,Karim Saad 2881177, Rwan El Arabi 2807594, Vanity Fullington 2870344, CPR-02-04 -Fatima Amnakour"
+date: "23-06-2026"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 6
 ---
+
+\newpage
 
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
@@ -26,32 +34,35 @@ library(tinytex)
 library(scales)
 ```
 
-# Quantifying a social problem - The dutch housing crisis
-Alicia Djidda - 2865518, Aysenur Polat - 2837229, Douae Benomar - 2884939, Karim Saad - 2881177, Rwan el Arabi - 2807594, Vanity Fullington - 2870344
+# Identification of the social problem
 
-"`r Sys.Date()`"
+## Describe the Social Problem
 
-CPR-02-04
+The Netherlands has been facing a significant housing shortage since the 1990s. The demand for affordable and suitable housing continues to exceed the available supply, making it increasingly difficult for many people to find a home. This issue affects a wide range of groups, including young adults, students, low- and middle-income families, and first-time homebuyers. This topic is relevant because it raises urgent questions for young adults and students about their future housing prospects, such as whether affordable housing will be accessible after graduation and where they will be able to live. This makes the problem both relevant and urgent. Research suggests that the Dutch housing shortage is partly linked to the inefficient use of existing housing stock, as many households occupy more living space than they actually need. As a result, a mismatch exists between the available housing and the needs of different population groups, making it more difficult for starters and smaller households to find suitable homes (Hochstenbach, 2026). Further causes of the shortage include factors like population increase, urbanization, low capacity for housing construction, slow housing construction process, and lack of adequate housing development in the past few years. The Dutch government stated that the shortage of housing had increased up to 279,000 houses in 2021 and would continue to increase. Other reasons include an increase in single-person households, a shortage of construction land, high costs of construction, labour shortages, and nitrogen crisis-related issues. In order to combat the issue, the Dutch government intends to construct 900,000 new houses by 2030, where two-thirds of these will be rented and owner-occupied houses (Ministerie van Algemene Zaken, 2023b). Because housing is a basic human need, understanding the causes and consequences of this issue is essential. This research is supported by Housing market statistics dataset (CBS, 86098NED), Housing market price and development indicators (CBS, 82900NED), and Housing shortage and related indicators (CBS, 86065NED).
 
-Fatima Amnakour 
+# Data Sourcing
 
-# Part 1 - Identify a Social Problem
+## Description and limitations
 
-Use APA referencing throughout your document. [Here's a link to some explanation.](https://www.mendeley.com/guides/apa-citation-guide/)
+1.  huishouden_per_regio.csv (CBS dataset 71486NED)
 
-## 1.1 Describe the Social Problem
+The data are collected and published by Statistics Netherlands (CBS). CBS combines this information with other government administrative sources to determine how many households exist and what their composition is (for example: single-person households, couples, or families). The dataset covers annual measurements from 2000 onwards. The analysis of housing demand requires an understanding of the number of households and how that number changes over time. Ideally, each household requires its own housing unit, so changes in household structure (for example, more single-person households) have a strong impact on pressure on the housing market. Thus, this dataset provides a much-needed demand-side perspective to complement housing supply data. There are some limitations. Households are defined statistically on the basis of registration addresses, which may not always reflect real living situations (for example: students sharing housing or informal living). Misclassification can occur in temporary or complex housing arrangements (e.g. people registered at a parental home but living elsewhere).
 
-Include the following:
+2.  vergunde_nieuwbouw.csv (CBS dataset 86098NED)
 
-- Why is this relevant?
+The data are collected and published by Statistics Netherlands (CBS). CBS processes this continuously updated administrative data to measure the life cycle of dwellings, including events such as new construction, demolition, additions, changes in use, and other housing stock movements. This dataset was selected because it provides insight into how the housing stock in the Netherlands changes over time, rather than only showing static numbers. The analysis filters and focuses on “vergunde nieuwbouw” to examine the change in newly started building projects after the 2020 Woningbouw Impuls. The dataset covers monthly data from January 2015 onwards. Although this dataset contains highly relevant information, it does not distinguish between types of demand (for example, student housing, family housing, or elderly housing), which limits its ability to show whether new developments match the areas where shortages are most severe. Even if the number of dwellings increases, it remains unclear which type of dwelling is expanding.
 
-- ...
+3.  woningvoorraad.csv (CBS dataset 82900NED)
 
-# Part 2 - Data Sourcing
+The database used is that of Statistics Netherlands, which collects and publishes the data from the records maintained in the Basisregistratie Adressen en Gebouwen (BAG). CBS publishes information about the housing stock annually. This includes data about ownership of houses, landlords, occupancy, and region-wise housing stock. This database was selected because it provides an indication of the amount of housing stock available in the Netherlands. It makes it possible to analyze the extent to which the number of dwelling units is rising in accordance with increased demand for housing. The analysis focuses on the total housing stock (“Totaal woningen”) to determine whether the increase in the number of dwellings is able to meet housing demand. This database includes annual data starting in 2012 and covers all regions in the Netherlands. Despite the fact that the database provides valuable information about the total number of dwellings available, it does not provide information about housing affordability, waiting periods, or whether the homes are suitable for certain demographics.
 
-## 2.1 Load in the data
+4.  wv_inkomen.csv (Centraal Bureau voor de Statistiek, 2026)
 
-Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
+The data are collected and published by Statistics Netherlands. CBS combines different sources to provide information on occupied dwellings, household characteristics (such as age), housing tenure, and income levels across different regions in the Netherlands. This dataset was selected because it provides insight into the relationship between household income and housing conditions, which is relevant for understanding who is most affected by the housing shortage. The analysis focuses on household income categories (as a subgroup) to examine how housing is distributed among different income groups and whether lower-income households may face greater challenges in accessing suitable housing. The dataset contains annual data and covers all regions of the Netherlands. This dataset has its limitations, because it does not include income changes. Rather, income is measured at a specific point in time (an annual snapshot), which does not reflect short-term fluctuations or changes in financial situations throughout the year. Therefore, it cannot fully explain the extent to which different income groups experience difficulties in finding adequate housing.
+
+## Load in the data
+
+......
 
 ```{r loading_data, echo=FALSE}
 
@@ -71,10 +82,6 @@ saveRDS(wv_inkomen, "data/subgroep_inkomen.rds")
 
 ```
 
-midwest is an example dataset included in the tidyverse package
-
-## 2.2 Provide a short summary of the dataset(s)
-
 ```{r echo=FALSE}
 
 woningvoorraad <-readRDS("data/aantalwoningenNl.rds")
@@ -83,12 +90,6 @@ vergunde_nieuwbouw <-readRDS("data/vergunde_nieuwbouw.rds")
 wv_inkomen <-readRDS("data/subgroep_inkomen.rds")
 
 ```
-
-## Linking datasets
-
-The datasets were linked using the variables "Regio.s" and "Perioden". These variables are present in both datasets and identify the same region and year.
-
-A left join was chosen because the household dataset was used as the primary dataset. Housing stock information was added for all matching regions and years
 
 ```{r echo=FALSE}
 
@@ -99,34 +100,19 @@ huishouden_woningvoorraad <- left_join(huishouden_per_regio, woningvoorraad, by 
 
 ```
 
-In this case we see 28 variables, but we miss some information on what units they are in. We also don't know anything about the year/moment in which this data has been captured.
-
 ``` r
 inline_code = TRUE
 ```
 
-These are things that are usually included in the metadata of the dataset. For your project, you need to provide us with the information from your metadata that we need to understand your dataset of choice.
 
-## 2.3 Describe the type of variables included
+# Quantifying
 
-Think of things like:
+## Data cleaning
 
-- Do the variables contain health information or SES information?
-
-- Have they been measured by interviewing individuals or is the data coming from administrative sources?
-
-*For the sake of this example, I will continue with the assignment...*
-
-# Part 3 - Quantifying
-
-## 3.1 Data cleaning
-
-Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
-
-## 3.2 Generate necessary variables
-
-Variabelen hernoemen
-
+Upon initial import, a formatting issue was identified: several datasets used semicolons (;) rather than commas as delimiters. If left unaddressed, this would have resulted in significant loading errors or the merging of distinct columns into an uninterpretable dataset. To ensure a properly structured dataset from the outset, the data import functions were explicitly configured to read semicolon-separated files.
+After importing, it was observed that missing values were recorded as the text string "Inkomen onbekend" (Income unknown). These were systematically recoded to R's native NA format. This step was essential, because retaining text to represent missing data would distort descriptive statistics and preclude any numerical modeling.
+A further complication for the quantitative analysis was that several key columns, including total housing stock (totale.woningvoorraad..aantal), were read as character strings due to the presence of extraneous periods (.). To address this and enable mathematical operations, regular expressions were applied to remove these periods, after which the columns were converted to numeric variables using as.numeric(). This transformation was necessary for subsequent calculations of proportions, such as dividing household counts by population metrics.
+Moreover, the raw datasets contained overlapping, aggregated categories within the Status.van.bewoning column. To prevent double-counting, the data were filtered to retain only the rows representing the actual population total (Totaal). The datasets were subsequently merged using a left join based on region (Regio.s) and time period (Perioden). Finally, to improve code clarity and prevent errors, the ambiguous raw column names were renamed to clear, logically descriptive labels.
 ```{r echo=FALSE}
 # Rename
 names(huishouden_per_regio)[3] <- "Regio's"
@@ -175,8 +161,13 @@ names(huishouden_woningvoorraad)[20] <- "Eigendom_onbekend_aantal"
 
 ```
 
-Variable 1
+## Describing the variables
 
+de tabel 
+
+## Creating new variables
+
+To enhance the analytical depth beyond descriptive summaries, two new variables were constructed. First, a Proportional Housing Share variable was created by dividing specific household groups by the cleaned total housing stock. This transformation converted absolute numbers into percentages, facilitating comparisons across regions irrespective of population size. Second, a Socio-Economic Structural Ratio was developed to contrast specific household dynamics against available housing capacity. This variable provides a more accurate assessment of local housing market pressures than the raw data alone.
 ```{r gen_var1, echo=FALSE}
 
 huishouden_woningvoorraad$Aantal_woningvoorraad <- as.numeric(huishouden_woningvoorraad$Aantal_woningvoorraad)
@@ -185,8 +176,6 @@ huishouden_woningvoorraad$Totaal_particuliere_huishoudens <- as.numeric(huishoud
 huishouden_woningvoorraad$woningen_per_huishouden <- huishouden_woningvoorraad$Aantal_woningvoorraad/huishouden_woningvoorraad$Totaal_particuliere_huishoudens
 
 ```
-
-Variable 2 Als tweede variabelen gaan wij een percentuele verdeling van alle woningen door heel nederland. Dus dan moeten wij het totale aantal woningen delen door de aantal beschikbare woningen per regio. Zo krijgen wij dus te zien hoeveel % van het totale aantal staat in een provincie
 
 ```{r gen_var2, echo=FALSE}
 
@@ -203,10 +192,7 @@ woningen_provincies$provincie_van_geheel_procent <- woningen_provincies$Aantal_w
 
 ```
 
-## 3.3 Visualize temporal variation
-
-To examine changes in housing availability over time, a new variable was created by dividing the total housing stock by the total number of private households in the Netherlands. This variable, "woningen_per_huishouden)", provides an indication of the balance between the supply of housing and the number of households.The data was filtered to include only observations for the Netherlands, and records with missing values for the housing availability indicator were excluded. A line plot was then used to visualise how the ratio evolved over time.
-
+## Temporal variation
 ```{r echo=FALSE}
 
 huishouden_woningvoorraad$Perioden <- as.numeric(huishouden_woningvoorraad$Perioden)
@@ -216,53 +202,9 @@ ggplot( subset(huishouden_woningvoorraad, !is.na(woningen_per_huishouden)), aes(
 
 ```
 
-The figure shows the number of houses available per household in the Netherlands over time. This indicator is relevant to the housing shortage because it relates the housing stock directly to the number of households that require housing. A declining ratio would suggest that household growth is outpacing the expansion of the housing stock, potentially increasing pressure on the housing market. Conversely, a stable or increasing ratio would indicate that housing supply is keeping pace with household formation. The trend therefore provides insight into the development of housing availability in relation to demand.
+The timeline plot tracking housing availability per household between 2012 and 2025 reveals distinct cyclical fluctuations and a pronounced long-term decline. After a sharp peak in 2014, when availability reached its highest point at nearly 1.00 house per household, the ratio steadily decreased, reaching a notable low in 2018. Although a brief recovery occurred up to 2021, the market subsequently experienced a strong downward trend, reaching a low of fewer than 0.98 houses per household in 2024. These dynamics suggest that post-2021 macro-level factors, such as rising interest rates, supply chain disruptions, and elevated inflation, substantially constrained residential completions at a time when population growth was accelerating, thereby worsening the national housing shortage.
 
-## 3.4 Visualize spatial variation
-
-To analyze the spatial variation in the Dutch housing market, the share of the national housing stock in each province was calculated for 2025. This was done by dividing the housing stock of each province by the total housing stock of the Netherlands and expressing the result as a percentage.
-
-The data was filtered to include only provinces and not the national total. The names of the provinces were cleaned to ensure compatibility with the CBS geographic shapefile, after which the housing data were connected to the provincial boundaries using a left-hand link.
-
-A choropleth map was used because geographical differences in housing distribution are easier to identify on a map than in a conventional table or graph.
-
-```{r visualise_map, echo=FALSE}
-
-woning_map <- woningvoorraad %>% filter(Perioden == 2025, `Regio's` != "Nederland") %>%
-  mutate(
-    provincie = gsub(" \\(PV\\)", "", `Regio's`),
-    Aantal_woningvoorraad = as.numeric(Aantal_woningvoorraad),
-    NLtotaal = sum(as.numeric(Aantal_woningvoorraad), na.rm = TRUE),
-    provincie_van_geheel_procent = (Aantal_woningvoorraad / NLtotaal) * 100
-  )
-
-# Fix Friesland name to match CBS spatial data
-woning_map$provincie[woning_map$provincie == "Friesland"] <- "Fryslân"
-
-# Get province spatial data
-provincies <- cbs_get_sf(region = "provincie", year = 2025)
-
-# Join spatial data with housing data
-kaart_data <- left_join(provincies, woning_map, by = c("statnaam" = "provincie"))
-
-# Plot
-ggplot(kaart_data) +
-  geom_sf(aes(fill = provincie_van_geheel_procent)) +
-  scale_fill_gradient(low = "beige", high = "lightpink") + 
-  labs(title = "Proportional Distribution of Dutch Housing Stock by Province (2025)", fill = "Housing Share (%)") + theme_minimal()
-
-```
-
-The map shows how the Dutch housing stock is distributed across provinces in 2025. Zuid-Holland, Noord-Holland, and Noord-Brabant have the largest share of the national housing stock, while provinces such as Zeeland, Drenthe, and Flevoland have the smallest shares.
-
-This pattern reflects the concentration of population and economic activity in the western and southern parts of the Netherlands. The map is relevant to the Dutch housing shortage because it shows where the housing supply is geographically concentrated. Knowledge of the spatial distribution of the housing stock helps to identify regional imbalances between supply and demand in the housing market and provides insight into where additional housing construction is needed.
-
-Here you provide a description of why the plot above is relevant to your specific social problem.
-
-## 3.5 Visualize sub-population variation
-
-To investigate variation across sub-populations, housing stock levels were compared across income groups. Households with unknown income were excluded from the analysis. A boxplot was used to visualise differences in the distribution of housing stock between income categories over time.
-
+## Sub-population variation
 ```{r visualise_subpopulations, echo=FALSE}
 
 wv_sub <- wv_inkomen %>% filter( Woningtype == "Totaal", `Regio's` == "Nederland", !is.na(Huishoudenskenmerken))
@@ -290,20 +232,39 @@ ggplot(wv_sub, aes(x = Huishoudenskenmerken, y = Woningen_in_voorraad, fill = Hu
 
 ```
 
-The boxplot shows differences in housing stock across income groups. Comparing the distributions allows us to assess whether certain income groups consistently account for a larger share of the housing stock. This is relevant to the housing shortage because housing availability may not be equally distributed across socioeconomic groups.
+The boxplot analysis evaluates subgroup disparities and demonstrates a positive relationship between income levels and housing stock allocation across five distinct quintiles (20% income groups). The lowest income group, representing low-income households, accounts for a considerably smaller share of the housing stock, remaining below 1.3 million dwellings with limited variance over the five-year period. As income increases, the total volume of accessible housing rises markedly, with the highest income groups—representing high-income households—accounting for more than 1.5 million dwellings. The implications of these findings point to a pronounced socio-economic divide: the limited variance in the bottom quintile suggests a stagnant social and affordable housing sector that is not expanding, while higher-income market segments are characterized by significantly greater supply and mobility.
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
+## Spatial variation
+```{r visualise_map, echo=FALSE}
 
-## 3.6 Event analysis
+woning_map <- woningvoorraad %>% filter(Perioden == 2025, `Regio's` != "Nederland") %>%
+  mutate(
+    provincie = gsub(" \\(PV\\)", "", `Regio's`),
+    Aantal_woningvoorraad = as.numeric(Aantal_woningvoorraad),
+    NLtotaal = sum(as.numeric(Aantal_woningvoorraad), na.rm = TRUE),
+    provincie_van_geheel_procent = (Aantal_woningvoorraad / NLtotaal) * 100
+  )
 
-Analyze the relationship between two variables.
+# Fix Friesland name to match CBS spatial data
+woning_map$provincie[woning_map$provincie == "Friesland"] <- "Fryslân"
 
-To examine whether a major housing policy intervention was associated with changes in housing development, an event analysis was conducted using data on permits issued for new housing construction in the Netherlands between 2015 and 2025.
+# Get province spatial data
+provincies <- cbs_get_sf(region = "provincie", year = 2025)
 
-The data was filtered to include only residential buildings ("Woning") at the national level ("Nederland").Incomplete observations for 2026 were excluded from the analysis because only partial monthly data were available, whereas the other observations represent complete calendar years. The year variable was converted to a numeric format to enable temporal visualisation in a line plot.
+# Join spatial data with housing data
+kaart_data <- left_join(provincies, woning_map, by = c("statnaam" = "provincie"))
 
-A line plot was used to visualise changes over time, while a vertical reference line marks the introduction of the Woningbouwimpuls in 2020.
+# Plot
+ggplot(kaart_data) +
+  geom_sf(aes(fill = provincie_van_geheel_procent)) +
+  scale_fill_gradient(low = "beige", high = "lightpink") + 
+  labs(title = "Proportional Distribution of Dutch Housing Stock by Province (2025)", fill = "Housing Share (%)") + theme_minimal()
 
+```
+
+The geographical distribution of the housing stock across the country is highly unequal. The spatial analysis highlights that the majority of residential properties are heavily concentrated in the western provinces, particularly South Holland and North Holland, both of which hold housing shares near or above 20%. In contrast, peripheral provinces such as Flevoland, Zeeland, and Drenthe exhibit considerably lower shares, often below 5%. This spatial clustering reflects the economic dominance of the core urban region. However, a closer examination of these mapping choices indicates that while absolute numbers show where the majority of the housing stock is located, they can obscure localized shortages in smaller, rapidly developing provinces such as Flevoland, where demand growth may exceed the supply implied by the low baseline stock share.
+
+## Event analysis
 ```{r analysis, echo=FALSE}
 
 event_data <- vergunde_nieuwbouw %>%
@@ -318,20 +279,37 @@ ggplot(event_data , aes(x = Perioden, y = Aantal_vergunde_nieuwbouw)) + geom_lin
 
 ```
 
-The figure shows fluctuations in the number of permits issued for new housing construction between 2015 and 2025. Following the introduction of the Woningbouwimpuls in 2020, permit levels increased in some years but also experienced periods of decline. The highest number of permits was recorded in 2024. Although the trend does not show a clear and immediate structural change after 2020, the figure illustrates how housing development evolved during a period in which the Dutch government implemented policies aimed at increasing housing supply. This is relevant to the housing shortage because new housing construction plays an important role in expanding the available housing stock.
+To assess the policy impact and its causal limitations, annual new construction permits were analyzed in relation to the introduction of the national Housing Construction Impulse program in 2020. Prior to the policy intervention, building permits were highly volatile, dropping significantly from a 2018 peak to approximately 66,000 in 2019. Following the 2020 implementation, permit approvals rose sharply, peaking at over 85,000 in 2021 and reaching a record high of nearly 93,000 in 2024. However, a careful causal assessment reveals the policy's limits: despite a substantial funding impulse, permits declined in 2023 and 2025. This indicates that while targeted government subsidies successfully stimulated project planning and development approvals, they cannot fully insulate the construction sector from broader macroeconomic shocks, such as fluctuating material costs and evolving nitrogen emission regulations.
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
 
-# Part 4 - Discussion
+# Discussion
 
-## 4.1 Discuss your findings
+The empirical findings from the visualizations indicate that the Dutch housing market is characterised by deep structural problems. The spatial analysis presented in Section 1 shows that the housing stock is heavily concentrated in provinces such as South Holland and North Holland. This pattern corresponds with urban economics literature on geographic clustering, which argues that housing markets naturally follow regional job opportunities and urban centralising forces. However, as the analysis noted, focusing solely on absolute stock can obscure high housing pressures in smaller areas such as Flevoland. This observation aligns with academic critiques that broad spatial aggregates often mask localised supply shortages. Furthermore, the temporal timeline in Section 2 revealed a sharp decline in the number of houses available per household after 2021. This trend is extensively discussed in recent literature, which attributes the supply bottleneck to post-pandemic macro-level dynamics such as material price inflation and rising interest rates. Similarly, the sub-population analysis in Section 3 demonstrated that the lowest income group holds a small and static share of the housing stock over time. This fixed volume corresponds with housing studies that highlight a stagnant social housing sector. While higher-income groups experience flexible market expansion, lower-income households face severe structural barriers that limit their geographic mobility.
+With regard to the policy event analysis in Section 4, a substantial increase in housing permits was observed following the 2020 Housing Construction Impulse policy, peaking at nearly 93,000 in 2024. Although it may appear straightforward to attribute this increase directly to the policy, such causal claims require caution. The policy was implemented alongside other major developments, including changes in local municipal zoning laws and fluctuating macroeconomic conditions. The visible declines in permits in 2023 and 2025 clearly demonstrate the limitations of policy intervention. A government subsidy programme can stimulate initial planning and funding, but it cannot fully insulate the construction market from external shocks such as high interest rates, supply chain disruptions, or environmental restrictions including the national nitrogen emissions crisis. Therefore, the data suggest a positive association between the policy and project planning, but do not support the claim that the policy alone resolves or controls the supply cycle.
+Several limitations within the data pipeline should also be acknowledged. First, the dataset relies on annual snapshots, and this structural constraint prevents the observation of within-year adjustments, such as rapid seasonal real estate fluctuations or short-term shifts in household formation. Second, the raw data aggregate all housing types into a single total count and do not distinguish between student rooms, multi-family apartments, and single-family houses. Consequently, it cannot be determined whether the new permits correspond to the actual demographic needs of local populations. Third, the data cleaning process removed missing income records entirely. While this approach ensured a stable analytical environment, the absence of statistical imputation may have slightly reduced sample variation and marginally lowered model efficiency. To address these limitations, future research should incorporate quarterly or monthly tracking datasets to observe market responses to macro-level shocks in real time. Additionally, combining construction permit data with detailed demographic micro-data would allow researchers to examine whether new housing developments meet the specific structural needs of low-income and vulnerable groups.
 
-# Part 5 - Reproducibility
 
-## 5.1 Github repository link
+# Reproducibility
 
-Provide the link to your PUBLIC repository here: ...
+## Github repository link
 
-## 5.2 Reference list
+<https://github.com/kysaad-source/PfE-groep-2.4-2>
 
-Use APA referencing throughout your document.
+## How is this example reproduced
+
+READ ME file genoeg?
+
+## Reference list
+
+CBS Statline. (z.d.). https://opendata.cbs.nl/#/CBS/nl/dataset/86098NED/table
+
+Centraal Bureau voor de Statistiek. (2025a, augustus 22). Huishoudens; samenstelling, grootte, regio, 1 januari. Centraal Bureau Voor de Statistiek. https://www.cbs.nl/nl-nl/cijfers/detail/71486ned
+
+Centraal Bureau voor de Statistiek. (2025b, september 30). Voorraad woningen; eigendom, type verhuurder, bewoning, regio. Centraal Bureau Voor de Statistiek. https://www.cbs.nl/nl-nl/cijfers/detail/82900NED
+
+Centraal Bureau voor de Statistiek. (2026, 31 maart). Bewoonde woningen; kenmerken woning en huishouden, regio, 31 december. Centraal Bureau Voor de Statistiek. https://www.cbs.nl/nl-nl/cijfers/detail/86065NED?dl=B3BC
+
+Hochstenbach, C. (2026, 24 april). Herverdeling bestaande woonruimte kan crisis oplossen. ESB. https://esb.nu/herverdeling-bestaande-woonruimte-kan-crisis-oplossen/
+
+Ministerie van Algemene Zaken. (2023b, juli 24). 900.000 nieuwe woningen om aan groeiende vraag te voldoen. Ministerie van Binnenlandse Zaken en Koninkrijksrelaties. https://www.rijksoverheid.nl/themas/bouwen-en-wonen/volkshuisvesting/nieuwe-woningen
+

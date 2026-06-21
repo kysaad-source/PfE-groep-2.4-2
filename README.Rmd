@@ -2,5 +2,11 @@
 title: "README"
 output: html_document
 ---
+The scources:
 
-the sources dhwwjhhfcjdweh
+CBS Statline. (z.d.). https://opendata.cbs.nl/#/CBS/nl/dataset/86098NED/table
+Centraal Bureau voor de Statistiek. (2025a, augustus 22). Huishoudens; samenstelling, grootte, regio, 1 januari. Centraal Bureau Voor de Statistiek. https://www.cbs.nl/nl-nl/cijfers/detail/71486ned
+Centraal Bureau voor de Statistiek. (2025b, september 30). Voorraad woningen; eigendom, type verhuurder, bewoning, regio. Centraal Bureau Voor de Statistiek. https://www.cbs.nl/nl-nl/cijfers/detail/82900NED
+Centraal Bureau voor de Statistiek. (2026, 31 maart). Bewoonde woningen; kenmerken woning en huishouden, regio, 31 december. Centraal Bureau Voor de Statistiek. https://www.cbs.nl/nl-nl/cijfers/detail/86065NED?dl=B3BC
+Hochstenbach, C. (2026, 24 april). Herverdeling bestaande woonruimte kan crisis oplossen. ESB. https://esb.nu/herverdeling-bestaande-woonruimte-kan-crisis-oplossen/
+Ministerie van Algemene Zaken. (2023b, juli 24). 900.000 nieuwe woningen om aan groeiende vraag te voldoen. Ministerie van Binnenlandse Zaken en Koninkrijksrelaties. https://www.rijksoverheid.nl/themas/bouwen-en-wonen/volkshuisvesting/nieuwe-woningen
